@@ -1,0 +1,37 @@
+# Entorno local
+.env
+api/.env
+web/.env.local
+*.local
+
+# Datos y runtime
+api/data/
+data/
+*.db
+*.sqlite
+*.sqlite3
+api/data/runtime/
+api/data/sounds/
+api/data/tokens/
+
+# Python
+api/.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Node / Next
+web/node_modules/
+web/.next/
+web/out/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
