@@ -36,7 +36,4 @@ Thumbs.db
 desktop.ini
 *.log
 
-# Material de referencia local (no forma parte del runtime)
-/parte vieja/
-/principales sistemas de rol de mesa.pdf
-/requerimientos actuales.pdf
+

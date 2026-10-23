@@ -9,8 +9,8 @@ Fecha de la sesión principal: **2026-10-22**.
 
 ### Contexto de arranque
 
-- Proyecto nuevo, hoy ubicado en `C:\Users\OSCAR\Desktop\TTRPG-AI-DM`.
-- Referencias de solo lectura: `parte vieja` (reglas JEV, estilo DM, router de IA) y `MiniBase-Web` (solo contrato, sin arrancar).
+- Proyecto nuevo, hoy ubicado en `C:\Users\OSCAR\Desktop\G I T H U B R E P O S\TTRPG-Assistant`.
+- Referencias de solo lectura: `C:\Users\OSCAR\Desktop\TTRPG-AI-DM\parte vieja` (reglas JEV, estilo DM, router de IA) y `MiniBase-Web` (solo contrato, sin arrancar).
 - Puertos reservados: API **8100**, web **3010**. No se tocaron 8000/3000/8010.
 - Todo el código, docs y mensajes en español.
 
@@ -113,3 +113,11 @@ Fecha de la sesión principal: **2026-10-22**.
 - «Los dados mandan en Python; el 3D solo actúa.»
 - «Si un módulo nuevo no está en el registry y en el contexto, no existe.»
 - «MiniBase es un invitado de solo lectura; nunca bloquea la mesa.»
+
+---
+
+## Publicación
+
+- Repo oficial: `https://github.com/blackars/TTRPG-AI-DM-Web` (rama `main`).
+- El proyecto vive en `C:\Users\OSCAR\Desktop\G I T H U B R E P O S\TTRPG-Assistant`.
+- `C:\Users\OSCAR\Desktop\TTRPG-AI-DM` conserva únicamente el material de referencia antiguo.
