@@ -49,7 +49,7 @@ Abre **`http://127.0.0.1:3010/pantalla/mesa`**. La base de datos y los seeds se 
 | `http://127.0.0.1:3010/pantalla/inventario` | Inventarios por personaje/criatura |
 | `http://127.0.0.1:3010/pantalla/cronicas` | Partidas guardadas y NPCs |
 | `http://127.0.0.1:3010/pantalla/escenas` | Catálogo de escenas |
-| `http://127.0.0.1:3010/pantalla/proyector` | Sala de proyección: mapa, rejilla, zoom y rotación |
+| `http://127.0.0.1:3010/pantalla/proyector` | Sala de proyección: mapa, rejilla, luces y efectos |
 | `http://127.0.0.1:3010/pantalla/biblioteca` | Biblioteca TTRPG, sistema activo y generadores |
 | `http://127.0.0.1:8100/biblioteca-clasica/index.html` | Interfaz clásica de la biblioteca (sin build) |
 | `http://127.0.0.1:3010/proyector` | Popup limpio para el segundo monitor (se abre desde la sala) |
@@ -138,7 +138,18 @@ La sala de proyección vive en `http://127.0.0.1:3010/pantalla/proyector` y exti
 - **Sincronización en vivo:** cada cambio se publica por `BroadcastChannel` + `localStorage` y se persiste en `scenes.presentacion_json`; el popup también sondea la API como respaldo.
 - **Tokens incluidos:** la capa de tokens se mueve, gira y escala con el mapa, pero los emojis se mantienen derechos y legibles.
 
-La configuración queda en `scenes.presentacion_json` (`zoom`, `rotacion`, `pan_x`, `pan_y`, `grid_visible`, `grid_cm`, `grid_color`, `grid_opacity` y el archivo de mapa). La migración de SQLite añade la columna de forma idempotente sin borrar datos.
+### Luces y efectos superpuestos (M12)
+
+La sala de proyección incluye capas de ambiente que se dibujan sobre el mapa y la rejilla, sin modificar la imagen original.
+
+- **Presets:** luz cálida, niebla, portal, aurora y bruma densa, con patrones radiales, cónicos, lineales y de ondas.
+- **Texturas animadas:** PNG, WEBP, GIF, APNG, MP4 y WEBM con transparencia; se suben desde el panel y se sirven en `/escenas-assets/`.
+- **Edición en vivo:** posición arrastrando la capa en la vista previa, tamaño, rotación, opacidad, desenfoque, modo de mezcla y velocidad de animación.
+- **Capas y tokens:** por defecto las capas quedan debajo de los tokens (z-index 15) y encima de la rejilla; «pintar encima de los tokens» las sube a z-index 25.
+- **Persistencia:** las capas viven en `scenes.presentacion_json.efectos` con posiciones en porcentaje del lienzo. Límites: 24 capas por escena y 80 MB por archivo.
+- **API:** `POST /api/escenarios/{id}/efectos` y `DELETE /api/escenarios/{id}/efectos/{efecto_id}`. Al borrar una escena se eliminan también sus mapas y texturas.
+
+La configuración queda en `scenes.presentacion_json` (`zoom`, `rotacion`, `pan_x`, `pan_y`, `grid_visible`, `grid_cm`, `grid_color`, `grid_opacity`, el archivo de mapa y la lista de efectos). La migración de SQLite añade la columna de forma idempotente sin borrar datos.
 
 ## Pruebas
 
@@ -152,7 +163,7 @@ cd web
 npm run build
 ```
 
-Resultado actual: **19 tests backend en verde** y build de Next.js sin errores.
+Resultado actual: **21 tests backend en verde** y build de Next.js sin errores.
 
 ## Estructura
 
@@ -183,4 +194,4 @@ TTRPG-Assistant/
 
 ## Estado del MVP
 
-Las fases **M0–M11** están implementadas. El checklist completo de demo está marcado en `ROADMAP.md`. Quedan como mejoras posteriores (no bloqueantes): drag & drop real de tokens, subida de archivos de audio desde la UI, módulo de visión futura y calibración física persistente por pantalla en el backend.
+Las fases **M0–M12** están implementadas. El checklist completo de demo está marcado en `ROADMAP.md`. Quedan como mejoras posteriores (no bloqueantes): drag & drop de módulos entre slots, subida de archivos de audio desde la UI, módulo de visión futura y calibración física persistente por pantalla en el backend.

@@ -98,6 +98,27 @@ button {
   background: radial-gradient(ellipse at center, transparent 45%, rgba(0, 0, 0, 0.55) 100%);
 }
 
+/* Capas de efectos del proyector: niebla, portales y texturas animadas. */
+@keyframes ttrpg-deriva {
+  from { transform: translate3d(-4%, -3%, 0) scale(1.04) rotate(-1deg); }
+  to { transform: translate3d(4%, 3%, 0) scale(1.08) rotate(1deg); }
+}
+
+@keyframes ttrpg-pulso {
+  from { transform: scale(0.92); }
+  to { transform: scale(1.08); }
+}
+
+@keyframes ttrpg-parpadeo {
+  from { opacity: 0.28; }
+  to { opacity: 1; }
+}
+
+@keyframes ttrpg-rotar {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 @media print {
   body {
     background: #fff;

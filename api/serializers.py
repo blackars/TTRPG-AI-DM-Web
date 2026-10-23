@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import re
+import uuid
 from pathlib import Path
 from urllib.parse import quote
 
@@ -22,10 +23,21 @@ PRESENTACION_BASE = {
     "grid_cm": 2.5,
     "grid_color": "#22ff88",
     "grid_opacity": 0.6,
+    "efectos": [],
 }
 
 COLOR_HEX = re.compile(r"^#[0-9a-fA-F]{6}$")
 
+MAX_EFECTOS = 24
+EXT_EFECTO_IMAGEN = {".png", ".webp", ".gif", ".apng", ".jpg", ".jpeg", ".avif"}
+EXT_EFECTO_VIDEO = {".mp4", ".webm"}
+EXTENSIONES_EFECTO = EXT_EFECTO_IMAGEN | EXT_EFECTO_VIDEO
+PATRONES_LUZ = {"radial", "conico", "lineal", "ondas"}
+MEZCLAS_EFECTO = {
+    "normal", "screen", "overlay", "soft-light", "multiply", "color-dodge", "plus-lighter",
+}
+ANIMACIONES_EFECTO = {"ninguna", "deriva", "pulso", "parpadeo", "rotar"}
+AJUSTES_EFECTO = {"contain", "cover", "fill"}
 
 def _numero(valor, defecto: float, minimo: float, maximo: float) -> float:
     try:
@@ -45,9 +57,79 @@ def _booleano(valor, defecto: bool = True) -> bool:
     return defecto
 
 
+def _texto_corto(valor, defecto: str, maximo: int) -> str:
+    texto = str(valor or "").strip()
+    return (texto or defecto)[:maximo]
+
+
+def _id_efecto(valor) -> str:
+    limpio = re.sub(r"[^A-Za-z0-9_-]", "", str(valor or ""))[:36]
+    return limpio or f"ef-{uuid.uuid4().hex[:10]}"
+
+
+def normalizar_efecto(raw: dict | None) -> dict | None:
+    """Normaliza una capa de luz/textura que se pinta sobre el tablero."""
+    if not isinstance(raw, dict):
+        return None
+    tipo = _texto_corto(raw.get("tipo"), "luz", 12).lower()
+    if tipo not in ("luz", "textura"):
+        tipo = "luz"
+    # El frontend recibe la URL pública, no la ruta interna. Si vuelve a enviar
+    # la capa, recuperamos el archivo desde `/escenas-assets/<nombre>`.
+    archivo = Path(str(raw.get("archivo") or raw.get("url") or "")).name
+    if archivo.startswith("."):
+        archivo = ""
+    patron = _texto_corto(raw.get("patron"), "radial", 12).lower()
+    if patron not in PATRONES_LUZ:
+        patron = "radial"
+    color = _texto_corto(raw.get("color"), "#ffb347", 9)
+    if not COLOR_HEX.match(color):
+        color = "#ffb347"
+    color2 = _texto_corto(raw.get("color2"), "#ff5c8a", 9)
+    if not COLOR_HEX.match(color2):
+        color2 = "#ff5c8a"
+    mezcla = _texto_corto(raw.get("mezcla"), "screen" if tipo == "luz" else "normal", 20)
+    if mezcla not in MEZCLAS_EFECTO:
+        mezcla = "screen" if tipo == "luz" else "normal"
+    animacion = _texto_corto(raw.get("animacion"), "ninguna", 12)
+    if animacion not in ANIMACIONES_EFECTO:
+        animacion = "ninguna"
+    ajuste = _texto_corto(raw.get("ajuste"), "contain", 12)
+    if ajuste not in AJUSTES_EFECTO:
+        ajuste = "contain"
+    rotacion = _numero(raw.get("rotacion"), 0.0, -360.0, 360.0)
+    if rotacion > 180:
+        rotacion -= 360
+    if rotacion < -180:
+        rotacion += 360
+    return {
+        "id": _id_efecto(raw.get("id")),
+        "tipo": tipo,
+        "nombre": _texto_corto(raw.get("nombre"), "Luz ambiental" if tipo == "luz" else "Textura", 60),
+        "archivo": archivo if tipo == "textura" else "",
+        "patron": patron,
+        "color": color,
+        "color2": color2,
+        "x": _numero(raw.get("x"), 50.0, 0.0, 100.0),
+        "y": _numero(raw.get("y"), 50.0, 0.0, 100.0),
+        "ancho": _numero(raw.get("ancho"), 60.0, 1.0, 300.0),
+        "alto": _numero(raw.get("alto"), 60.0, 1.0, 300.0),
+        "rotacion": rotacion,
+        "opacidad": _numero(raw.get("opacidad"), 0.55 if tipo == "luz" else 0.82, 0.0, 1.0),
+        "mezcla": mezcla,
+        "animacion": animacion,
+        "velocidad": _numero(raw.get("velocidad"), 1.0, 0.1, 5.0),
+        "suavizado": _numero(raw.get("suavizado"), 18.0 if tipo == "luz" else 0.0, 0.0, 100.0),
+        "ajuste": ajuste,
+        "encima_tokens": _booleano(raw.get("encima_tokens"), False),
+        "anclado_mapa": _booleano(raw.get("anclado_mapa"), False),
+        "visible": _booleano(raw.get("visible"), True),
+    }
+
+
 def normalizar_presentacion(raw: dict | None) -> dict:
-    """Normaliza y limita la configuración de imagen/rejilla de una escena."""
-    datos = {**PRESENTACION_BASE, **(raw or {})}
+    """Normaliza y limita la configuración de imagen/rejilla/efectos de una escena."""
+    datos = {**PRESENTACION_BASE, **(raw if isinstance(raw, dict) else {})}
     mapa = Path(str(datos.get("mapa") or "")).name
     if mapa.startswith("."):
         mapa = ""
@@ -57,6 +139,13 @@ def normalizar_presentacion(raw: dict | None) -> dict:
     if rotacion < -180:
         rotacion += 360
     color = str(datos.get("grid_color") or PRESENTACION_BASE["grid_color"])
+    efectos_raw = datos.get("efectos")
+    efectos = []
+    if isinstance(efectos_raw, list):
+        for item in efectos_raw[:MAX_EFECTOS]:
+            efecto = normalizar_efecto(item)
+            if efecto:
+                efectos.append(efecto)
     return {
         "mapa": mapa,
         "zoom": _numero(datos.get("zoom"), 1.0, 0.2, 8.0),
@@ -67,16 +156,33 @@ def normalizar_presentacion(raw: dict | None) -> dict:
         "grid_cm": _numero(datos.get("grid_cm"), 2.5, 0.4, 20.0),
         "grid_color": color if COLOR_HEX.match(color) else PRESENTACION_BASE["grid_color"],
         "grid_opacity": _numero(datos.get("grid_opacity"), 0.6, 0.0, 1.0),
+        "efectos": efectos,
     }
 
 
+def efecto_dict(efecto: dict) -> dict:
+    """Versión pública de un efecto: resuelve el archivo servido."""
+    datos = {**efecto}
+    archivo = Path(str(datos.pop("archivo", "") or "")).name
+    sufijo = Path(archivo).suffix.lower()
+    datos["url"] = ""
+    if archivo and (ESCENARIOS_DIR / archivo).is_file():
+        datos["url"] = f"/escenas-assets/{quote(archivo)}"
+    if datos.get("tipo") == "textura":
+        datos["tipo_archivo"] = "video" if sufijo in EXT_EFECTO_VIDEO else "imagen"
+    else:
+        datos["tipo_archivo"] = "css"
+    return datos
+
+
 def presentacion_dict(raw: dict | None) -> dict:
-    """Versión pública: añade la URL servida del mapa y oculta la ruta interna."""
+    """Versión pública: añade la URL servida del mapa/efectos y oculta rutas internas."""
     datos = normalizar_presentacion(raw)
     mapa = datos.pop("mapa")
     datos["mapa_url"] = ""
     if mapa and (ESCENARIOS_DIR / mapa).is_file():
         datos["mapa_url"] = f"/escenas-assets/{quote(mapa)}"
+    datos["efectos"] = [efecto_dict(e) for e in datos.get("efectos", [])]
     return datos
 
 

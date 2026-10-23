@@ -98,7 +98,8 @@ POST /api/modules/<id>/action
 ## Escenario activo (`escenario`)
 
 - **Frontend:** `web/src/modules/EscenarioModule.tsx`, `components/SceneBoard.tsx`
-- **Qué hace:** tablero 12×9 de la escena activa, tokens con emoji, clic para colocar/mover/seleccionar, control de luz y playlist.
+- **Qué hace:** tablero 12×9 de la escena activa, tokens con emoji, clic para colocar/seleccionar y arrastre real para mover, control de luz y playlist.
+- **Arrastre:** `SceneBoard` usa pointer events y convierte el puntero a celda; `EscenarioModule` persiste el movimiento con `mover_token` y conserva la selección.
 - **API:**
   - `GET /api/modules/escenario/state` → escena activa, grid, sonidos.
   - `POST .../escenario/action` → alias que opera sobre la escena activa para `agregar_token`, `mover_token`, `borrar_token`, `set_light`.
@@ -107,20 +108,23 @@ POST /api/modules/<id>/action
 ## Escenarios (`escenarios`)
 
 - **Frontend:** `web/src/modules/EscenariosModule.tsx`
-- **Qué hace:** catálogo de escenas, creación/edición/borrado, activación, playlist por escena, presets de fondo, miniatura del mapa y botón **Proyectar**.
-- **API:** `GET .../escenarios/state`; `POST .../action`: `crear`, `editar`, `borrar`, `activar`, `set_presentacion`, `agregar_token`, `mover_token`, `borrar_token`, `set_light`. Mapas: `POST /api/escenarios/{id}/mapa` y `DELETE /api/escenarios/{id}/mapa`.
-- **Persistencia:** `scenes` (`bg`, `light_json`, `tokens_json`, `playlist_json`, `presentacion_json`, `activo`). Solo una escena activa. Los archivos de mapa viven en `api/data/escenarios/` y se sirven en `/escenas-assets/`.
-- **Presentación:** `presentacion_json` guarda `zoom`, `rotacion`, `pan_x`, `pan_y`, `grid_visible`, `grid_cm`, `grid_color`, `grid_opacity` y el nombre del archivo de mapa. La API normaliza y limita los valores.
-- **Contexto:** `escena_activa`, listado `escenas`, badge `escenarios`.
+- **Qué hace:** catálogo de escenas, creación/edición/borrado, activación, playlist por escena, presets de fondo, miniatura del mapa y botón **Proyectar**. El editor de escena incluye un **tablero editable**: arrastra un token para moverlo, clic en casilla vacía para colocar uno nuevo y botón **Quitar token**.
+- **API:** `GET .../escenarios/state`; `POST .../action`: `crear`, `editar`, `borrar`, `activar`, `set_presentacion`, `agregar_token`, `mover_token`, `borrar_token`, `set_light`. Mapas: `POST /api/escenarios/{id}/mapa` y `DELETE /api/escenarios/{id}/mapa`. Efectos: `POST /api/escenarios/{id}/efectos` y `DELETE /api/escenarios/{id}/efectos/{efecto_id}`.
+- **Persistencia:** `scenes` (`bg`, `light_json`, `tokens_json`, `playlist_json`, `presentacion_json`, `activo`). Solo una escena activa. Los archivos de mapa y de efectos viven en `api/data/escenarios/` y se sirven en `/escenas-assets/`.
+- **Presentación:** `presentacion_json` guarda `zoom`, `rotacion`, `pan_x`, `pan_y`, `grid_visible`, `grid_cm`, `grid_color`, `grid_opacity`, el nombre del archivo de mapa y la lista `efectos`. La API normaliza y limita los valores; las capas se guardan con su archivo interno y se devuelven con `url` pública.
+- **Anclaje:** cada capa acepta `anclado_mapa`; si está activo, su posición y tamaño se leen como porcentaje del recuadro del mapa y se pintan dentro de su capa transformada, así viaja con la imagen al hacer zoom, rotar o panear.
+- **Contexto:** `escena_activa`, listado `escenas`, badge `escenarios`; `table_state.efectos` resume las capas activas para el DM.
 
 ## Proyector (`proyector`)
 
 - **Frontend:** `web/src/modules/ProyectorModule.tsx` (sala de control) y ruta limpia `web/src/app/proyector/page.tsx` (popup del segundo monitor).
-- **Qué hace:** controla la escena activa en directo: subir/quitar mapa, rotar, hacer zoom, paneo, activar/ocultar rejilla, color, opacidad, dial de tamaño de celda y calibración del ancho físico de la pantalla. Abre el popup con **Proyectar** o intenta la segunda pantalla con **Pantalla 2**.
+- **Qué hace:** controla la escena activa en directo: subir/quitar mapa, rotar, hacer zoom, paneo, **luz ambiental** (color e intensidad con guardado automático), activar/ocultar rejilla, color, opacidad, dial de tamaño de celda, calibración del ancho físico y capas de luz/niebla/portales/texturas. Abre el popup con **Proyectar** o intenta la segunda pantalla con **Pantalla 2**.
+- **Tokens:** la vista previa es un tablero vivo: se pueden arrastrar los tokens a otra celda (invirtiendo pan, rotación y zoom) y el movimiento se persiste con `mover_token`; el popup sigue siendo de solo lectura.
 - **Sincronización:** `BroadcastChannel` + `localStorage` publican cada cambio al popup; la API persiste en `scenes.presentacion_json` y el popup sondea como respaldo. La rejilla se recalcula con `cm × (px_pantalla / cm_pantalla)`.
-- **API:** `GET /api/modules/proyector/state`, `POST .../proyector/action` (`publicar` / `refrescar`). La presentación se guarda vía `POST /api/modules/escenarios/action` (`set_presentacion`).
-- **Contexto:** `table_state` (`phase`, `grid_visible`, `grid_cm`, `mapa_url`, `tokens`).
-- **Assets:** `/escenas-assets/` sirve los mapas subidos; `ProjectorStage` dibuja mapa, luz, tokens y rejilla.
+- **Efectos:** `ProjectorEffectsPanel` ofrece presets y subida de PNG/WebP/GIF/APNG/MP4/WebM; `ProjectorEffects` pinta patrones o texturas con mezcla y animación CSS. Las posiciones son porcentaje del lienzo (o del recuadro del mapa con `anclado_mapa`) y se arrastran en la vista previa. La capa queda sobre la rejilla y debajo de los tokens; `encima_tokens` la sube.
+- **API:** `GET /api/modules/proyector/state`, `POST .../proyector/action` (`publicar` / `refrescar`). La presentación se guarda vía `POST /api/modules/escenarios/action` (`set_presentacion`); las texturas usan `POST/DELETE /api/escenarios/{id}/efectos`.
+- **Contexto:** `table_state` (`phase`, `grid_visible`, `grid_cm`, `mapa_url`, `efectos`, `tokens`).
+- **Assets:** `/escenas-assets/` sirve los mapas y las texturas subidas; `ProjectorStage` dibuja mapa, luz ambiental, capas de efectos, rejilla y tokens. Límites: 24 capas y 80 MB por archivo.
 
 ## Sonido ambiente (`sonido`)
 

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { SceneBoard, fondo, PRESENTACION_VACIA } from "@/components/SceneBoard";
-import { Badge, Button, Empty, ErrorBox, Field, Input, Modal, Select, Textarea } from "@/components/ui";
+import { Badge, Button, Empty, EmojiPicker, ErrorBox, Field, Input, Modal, Select, Textarea } from "@/components/ui";
 import { api, API_URL, errorTexto } from "@/lib/api";
 import { cn } from "@/lib/format";
 import { leerPantallaCm, leerProyectorLocal, publicarProyector } from "@/lib/proyector";
@@ -36,6 +36,8 @@ export function EscenariosModule(_props: ModuleProps) {
   const [form, setForm] = useState<FormEscena | null>(null);
   const [cargando, setCargando] = useState<string | null>(null);
   const [errorLocal, setErrorLocal] = useState<string | null>(null);
+  const [tableroSel, setTableroSel] = useState<string | null>(null);
+  const [nuevoToken, setNuevoToken] = useState<{ nombre: string; emoji: string; x: number; y: number } | null>(null);
   const bump = useAppStore((s) => s.bump);
   const notify = useAppStore((s) => s.notify);
 
@@ -57,11 +59,41 @@ export function EscenariosModule(_props: ModuleProps) {
   }
 
   function editar(escena: EscenariosData["escenas"][number]) {
+    setTableroSel(null);
+    setNuevoToken(null);
     setForm({
       id: escena.id, nombre: escena.nombre, descripcion: escena.descripcion,
       bg: escena.bg, luzColor: escena.light?.color ?? "#f5b544",
       luzOpacidad: escena.light?.opacity ?? 0.18, playlist: escena.playlist,
     });
+  }
+
+  function cerrarFormulario() {
+    setForm(null);
+    setTableroSel(null);
+    setNuevoToken(null);
+  }
+
+  function clicCasillaTablero(x: number, y: number) {
+    if (!form?.id) return;
+    if (tableroSel) {
+      void ejecutar("mover_token", { scene_id: form.id, token_id: tableroSel, x, y }, "Token movido");
+    } else {
+      setNuevoToken({ nombre: "", emoji: "🔵", x, y });
+    }
+  }
+
+  async function colocarToken() {
+    if (!form?.id || !nuevoToken) return;
+    if (!nuevoToken.nombre.trim()) {
+      notify("Ponle un nombre al token antes de colocarlo", "error");
+      return;
+    }
+    const ok = await ejecutar("agregar_token", {
+      scene_id: form.id, token_nombre: nuevoToken.nombre.trim(), emoji: nuevoToken.emoji,
+      x: nuevoToken.x, y: nuevoToken.y,
+    }, "Token colocado");
+    if (ok) setNuevoToken(null);
   }
 
   async function guardar() {
@@ -219,7 +251,7 @@ export function EscenariosModule(_props: ModuleProps) {
         <Empty icon="🎭" title="Sin escenas">Crea la primera escena y actívala para el proyector.</Empty>
       ) : null}
 
-      <Modal open={form !== null} onClose={() => setForm(null)} title={form?.id ? "Editar escena" : "Nueva escena"} wide>
+      <Modal open={form !== null} onClose={cerrarFormulario} title={form?.id ? "Editar escena" : "Nueva escena"} wide>
         {form ? (
           <div className="space-y-3">
             <div className="grid gap-3 sm:grid-cols-2">
@@ -315,14 +347,78 @@ export function EscenariosModule(_props: ModuleProps) {
                   playlist: form.playlist, activo: false, ts: "",
                 }}
                 grid={data.grid}
-                readonly
+                readonly={!form.id}
+                selectedId={tableroSel}
+                onTokenClick={(t) => setTableroSel(t.id === tableroSel ? null : t.id)}
+                onTokenMove={(t, x, y) => {
+                  setTableroSel(t.id);
+                  void ejecutar("mover_token", { scene_id: form.id, token_id: t.id, x, y }, "Token movido");
+                }}
+                onCellClick={form.id ? clicCasillaTablero : undefined}
                 className="rounded-none border-0"
               />
             </div>
+            {form.id ? (
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <p className="text-[10px] leading-relaxed text-slate-500">
+                  {tableroSel
+                    ? "Arrastra el token a otra casilla o haz clic en una casilla para moverlo."
+                    : "Arrastra un token para moverlo, o haz clic en una casilla vacía para colocar uno nuevo."}
+                </p>
+                {tableroSel ? (
+                  <Button
+                    size="xs"
+                    variant="danger"
+                    loading={cargando === "borrar_token"}
+                    onClick={() => {
+                      const token = data.escenas.find((e) => e.id === form.id)?.tokens.find((t) => t.id === tableroSel);
+                      if (!token || !window.confirm(`¿Quitar a ${token.nombre} de la escena?`)) return;
+                      void ejecutar("borrar_token", { scene_id: form.id, token_id: tableroSel }, "Token retirado");
+                      setTableroSel(null);
+                    }}
+                  >
+                    Quitar token
+                  </Button>
+                ) : null}
+              </div>
+            ) : null}
             <div className="flex justify-end gap-2">
-              <Button variant="ghost" onClick={() => setForm(null)}>Cancelar</Button>
+              <Button variant="ghost" onClick={cerrarFormulario}>Cancelar</Button>
               <Button variant="primary" onClick={() => void guardar()} loading={cargando === "crear" || cargando === "editar"}>
                 {form.id ? "Guardar cambios" : "Crear escena"}
+              </Button>
+            </div>
+          </div>
+        ) : null}
+      </Modal>
+
+      <Modal open={nuevoToken !== null} onClose={() => setNuevoToken(null)} title="Colocar token">
+        {nuevoToken ? (
+          <div className="space-y-3">
+            <div className="flex items-end gap-2">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-line bg-ink text-2xl">
+                {nuevoToken.emoji}
+              </div>
+              <Field label="Nombre" className="flex-1">
+                <Input
+                  autoFocus
+                  value={nuevoToken.nombre}
+                  onChange={(e) => setNuevoToken({ ...nuevoToken, nombre: e.target.value })}
+                  placeholder="Lobo espectral"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") void colocarToken();
+                  }}
+                />
+              </Field>
+            </div>
+            <EmojiPicker value={nuevoToken.emoji} onChange={(emoji) => setNuevoToken({ ...nuevoToken, emoji })} />
+            <p className="text-[10px] leading-relaxed text-slate-500">
+              Se colocará en la casilla ({nuevoToken.x}, {nuevoToken.y}).
+            </p>
+            <div className="flex justify-end gap-2">
+              <Button variant="ghost" onClick={() => setNuevoToken(null)}>Cancelar</Button>
+              <Button variant="primary" onClick={() => void colocarToken()} loading={cargando === "agregar_token"}>
+                Colocar token
               </Button>
             </div>
           </div>

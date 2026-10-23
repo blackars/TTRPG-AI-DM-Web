@@ -269,6 +269,96 @@ def test_escena_presentacion_y_mapa(client):
     })
 
 
+def test_efectos_de_luz_texturas_y_limpieza(client):
+    estado = client.get("/api/modules/escenarios/state").json()
+    activa = estado["activa"]
+    assert activa
+
+    luz = {
+        "id": "luz-prueba", "tipo": "luz", "nombre": "Luz de prueba",
+        "patron": "conico", "color": "#ff0000", "color2": "#00ff00",
+        "x": 30, "y": 40, "ancho": 80, "alto": 60, "rotacion": 15,
+        "opacidad": 0.7, "mezcla": "screen", "animacion": "pulso",
+        "velocidad": 1.5, "suavizado": 12, "encima_tokens": True,
+        "anclado_mapa": True, "visible": True,
+    }
+    r = client.post("/api/modules/escenarios/action", json={
+        "action": "set_presentacion",
+        "scene_id": activa["id"],
+        "presentacion": {"efectos": [luz]},
+    })
+    assert r.status_code == 200, r.text
+    p = next(e for e in r.json()["escenas"] if e["id"] == activa["id"])["presentacion"]
+    assert len(p["efectos"]) == 1
+    guardada = p["efectos"][0]
+    assert guardada["id"] == "luz-prueba"
+    assert guardada["patron"] == "conico" and guardada["animacion"] == "pulso"
+    assert guardada["tipo_archivo"] == "css" and guardada["url"] == ""
+    assert guardada["anclado_mapa"] is True
+
+    # El frontend vuelve a enviar la versión pública (url, no archivo): debe
+    # conservar las texturas y sus URLs al guardar de nuevo.
+    png = base64.b64decode(
+        "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk"
+        "+A8AAQUBAScY42YAAAAASUVORK5CYII="
+    )
+    subida = client.post(
+        f"/api/escenarios/{activa['id']}/efectos",
+        files={"archivo": ("niebla-prueba.png", png, "image/png")},
+    )
+    assert subida.status_code == 200, subida.text
+    p = next(e for e in subida.json()["escenas"] if e["id"] == activa["id"])["presentacion"]
+    textura = next(e for e in p["efectos"] if e["nombre"] == "niebla-prueba")
+    assert textura["tipo"] == "textura" and textura["tipo_archivo"] == "imagen"
+    assert textura["url"].startswith("/escenas-assets/efecto-")
+    assert client.get(textura["url"]).content == png
+
+    r = client.post("/api/modules/escenarios/action", json={
+        "action": "set_presentacion",
+        "scene_id": activa["id"],
+        "presentacion": {"efectos": p["efectos"]},
+    })
+    assert r.status_code == 200, r.text
+    p2 = next(e for e in r.json()["escenas"] if e["id"] == activa["id"])["presentacion"]
+    reenviada = next(e for e in p2["efectos"] if e["id"] == textura["id"])
+    assert reenviada["url"] == textura["url"]
+
+    borrada = client.delete(f"/api/escenarios/{activa['id']}/efectos/{textura['id']}")
+    assert borrada.status_code == 200
+    assert client.get(textura["url"]).status_code == 404
+    p3 = next(e for e in borrada.json()["escenas"] if e["id"] == activa["id"])["presentacion"]
+    assert all(e["id"] != textura["id"] for e in p3["efectos"])
+
+    client.post("/api/modules/escenarios/action", json={
+        "action": "set_presentacion",
+        "scene_id": activa["id"],
+        "presentacion": {"efectos": []},
+    })
+
+
+def test_borrar_escena_limpia_efectos(client):
+    creada = client.post("/api/modules/escenarios/action", json={
+        "action": "crear", "nombre": "Escena temporal M12"})
+    assert creada.status_code == 200
+    escena = next(e for e in creada.json()["escenas"] if e["nombre"] == "Escena temporal M12")
+    png = base64.b64decode(
+        "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk"
+        "+A8AAQUBAScY42YAAAAASUVORK5CYII="
+    )
+    subida = client.post(
+        f"/api/escenarios/{escena['id']}/efectos",
+        files={"archivo": ("portal-temporal.png", png, "image/png")},
+    )
+    assert subida.status_code == 200, subida.text
+    p = next(e for e in subida.json()["escenas"] if e["id"] == escena["id"])["presentacion"]
+    url = p["efectos"][0]["url"]
+    assert client.get(url).status_code == 200
+
+    borrada = client.post("/api/modules/escenarios/action", json={
+        "action": "borrar", "id": escena["id"]})
+    assert borrada.status_code == 200
+    assert client.get(url).status_code == 404
+
 def test_borrar_escena_limpia_mapa(client):
     creada = client.post("/api/modules/escenarios/action", json={
         "action": "crear", "nombre": "Escena temporal M11"})

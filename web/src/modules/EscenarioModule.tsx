@@ -38,6 +38,11 @@ export function EscenarioModule(_props: ModuleProps) {
     }
   }, [data?.activa?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
+    if (!data?.activa || !seleccionado) return;
+    if (!data.activa.tokens.some((t) => t.id === seleccionado)) setSeleccionado(null);
+  }, [data?.activa, seleccionado]);
+
   async function ejecutar(accion: string, payload: Record<string, unknown>, mensaje?: string) {
     setCargando(accion);
     setErrorLocal(null);
@@ -71,22 +76,37 @@ export function EscenarioModule(_props: ModuleProps) {
   const escena = data.activa;
   const tokenSel = escena.tokens.find((t) => t.id === seleccionado) ?? null;
 
+  function abrirNuevoToken(x?: number, y?: number) {
+    setNuevo({
+      nombre: "",
+      emoji: "🔵",
+      x: x ?? Math.floor((data?.grid.cols ?? 12) / 2),
+      y: y ?? Math.floor((data?.grid.rows ?? 9) / 2),
+      color: "#f5b544",
+    });
+    setModal(true);
+  }
+
   function clicCasilla(x: number, y: number) {
     if (seleccionado) {
       void ejecutar("mover_token", { scene_id: escena.id, token_id: seleccionado, x, y });
     } else {
-      setNuevo({ nombre: "", emoji: "🔵", x, y, color: "#f5b544" });
-      setModal(true);
+      abrirNuevoToken(x, y);
     }
   }
 
   async function agregarToken() {
-    if (!nuevo.nombre.trim()) return;
-    const ok = await ejecutar("agregar_token", {
+    if (!nuevo.nombre.trim()) {
+      notify("Ponle un nombre al token antes de colocarlo", "error");
+      return;
+    }
+    const res = await ejecutar("agregar_token", {
       scene_id: escena.id, token_nombre: nuevo.nombre.trim(), emoji: nuevo.emoji,
       x: nuevo.x, y: nuevo.y, color: nuevo.color,
     }, "Token colocado");
-    if (ok) {
+    if (res) {
+      const ultimo = res.activa?.tokens[res.activa.tokens.length - 1];
+      setSeleccionado(ultimo?.id ?? null);
       setModal(false);
       setNuevo({ nombre: "", emoji: "🔵", x: 5, y: 4, color: "#f5b544" });
     }
@@ -105,7 +125,7 @@ export function EscenarioModule(_props: ModuleProps) {
           <p className="mt-0.5 text-[11px] leading-relaxed text-slate-400">{escena.descripcion}</p>
         </div>
         <div className="flex shrink-0 flex-wrap gap-1.5">
-          <Button size="sm" variant="secondary" onClick={() => setModal(true)}>+ Token</Button>
+          <Button size="sm" variant="secondary" onClick={() => abrirNuevoToken()}>+ Token</Button>
           <Link href="/pantalla/proyector">
             <Button size="sm" variant="primary">📺 Proyectar</Button>
           </Link>
@@ -123,19 +143,26 @@ export function EscenarioModule(_props: ModuleProps) {
         grid={data.grid}
         selectedId={seleccionado}
         onTokenClick={(t: TokenEscena) => setSeleccionado(t.id === seleccionado ? null : t.id)}
+        onTokenMove={(t: TokenEscena, x, y) => {
+          setSeleccionado(t.id);
+          void ejecutar("mover_token", { scene_id: escena.id, token_id: t.id, x, y }, "Token movido");
+        }}
         onCellClick={clicCasilla}
       />
 
       <div className="flex flex-wrap items-center justify-between gap-2 text-[10px] text-slate-500">
         <p>
           {seleccionado
-            ? "Haz clic en una casilla para mover el token seleccionado."
-            : "Haz clic en una casilla vacía para colocar un token nuevo."}
+            ? "Arrastra el token a otra casilla o haz clic en una casilla para moverlo."
+            : "Haz clic en una casilla vacía para colocar un token nuevo, o arrastra un token para moverlo."}
         </p>
         <div className="flex items-center gap-1.5">
           {tokenSel ? (
             <>
               <Badge color="gold">{tokenSel.emoji} {tokenSel.nombre}</Badge>
+              <Button size="xs" variant="ghost" onClick={() => setSeleccionado(null)}>
+                Deseleccionar
+              </Button>
               <Button
                 size="xs"
                 variant="danger"

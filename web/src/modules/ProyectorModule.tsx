@@ -2,8 +2,11 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
+import { ProjectorEffectsPanel, type PresetEfecto } from "@/components/ProjectorEffectsPanel";
 import { ProjectorStage } from "@/components/ProjectorStage";
-import { PRESENTACION_VACIA, type PresentacionEscena } from "@/components/SceneBoard";
+import {
+  PRESENTACION_VACIA, type EfectoEscena, type PresentacionEscena, type TokenEscena,
+} from "@/components/SceneBoard";
 import { Badge, Button, Empty, ErrorBox, Field, Input, Switch } from "@/components/ui";
 import { api, errorTexto } from "@/lib/api";
 import { cn } from "@/lib/format";
@@ -16,7 +19,14 @@ import type { EscenariosData } from "./EscenarioModule";
 import type { ModuleProps } from "./types";
 
 const MAX_MAPA = 15 * 1024 * 1024;
+const MAX_EFECTOS = 24;
+const MAX_EFECTO = 80 * 1024 * 1024;
+const EXTENSIONES_EFECTO = new Set(["png", "webp", "gif", "apng", "jpg", "jpeg", "avif", "mp4", "webm"]);
 const PX_POR_CM_96DPI = 96 / 2.54;
+
+function idEfecto(): string {
+  return `ef-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
+}
 
 function limitar(valor: number, minimo: number, maximo: number): number {
   return Math.max(minimo, Math.min(maximo, valor));
@@ -56,7 +66,13 @@ export function ProyectorModule(_props: ModuleProps) {
   const [abriendo, setAbriendo] = useState(false);
   const [errorLocal, setErrorLocal] = useState<string | null>(null);
   const [arrastrandoMapa, setArrastrandoMapa] = useState(false);
+  const [efectoSeleccionado, setEfectoSeleccionado] = useState<string | null>(null);
+  const [subiendoEfecto, setSubiendoEfecto] = useState(false);
+  const [eliminandoEfecto, setEliminandoEfecto] = useState<string | null>(null);
+  const [luzColor, setLuzColor] = useState("#f5b544");
+  const [luzOpacidad, setLuzOpacidad] = useState(0.18);
   const timerRef = useRef<number | null>(null);
+  const luzTimerRef = useRef<number | null>(null);
   const dragRef = useRef<{ x: number; y: number; panX: number; panY: number; w: number; h: number } | null>(null);
   const bump = useAppStore((s) => s.bump);
   const notify = useAppStore((s) => s.notify);
@@ -77,45 +93,80 @@ export function ProyectorModule(_props: ModuleProps) {
   useEffect(() => {
     if (!data) return;
     fijarPresentacion(data.activa?.presentacion ?? null);
+    setLuzColor(data.activa?.light?.color ?? "#f5b544");
+    setLuzOpacidad(data.activa?.light?.opacity ?? 0.18);
     // Solo al cambiar de escena: los ajustes locales no deben ser pisados por
     // un refresco de fondo mientras el DM mueve los deslizadores.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.activa?.id]);
 
   useEffect(() => {
+    setEfectoSeleccionado(null);
+  }, [data?.activa?.id]);
+
+  useEffect(() => {
+    if (!presentacion || !efectoSeleccionado) return;
+    if (!(presentacion.efectos ?? []).some((e) => e.id === efectoSeleccionado)) {
+      setEfectoSeleccionado(null);
+    }
+  }, [presentacion, efectoSeleccionado]);
+
+  useEffect(() => {
     if (!data || !data.activa || !presentacion) return;
     publicarProyector({
-      escena: { ...data.activa, presentacion },
+      escena: {
+        ...data.activa,
+        light: { color: luzColor, opacity: luzOpacidad },
+        presentacion,
+      },
       grid: data.grid,
       presentacion,
       pantalla_cm: pantallaCm,
     });
-  }, [data, presentacion, pantallaCm]);
+  }, [data, presentacion, pantallaCm, luzColor, luzOpacidad]);
 
   useEffect(() => {
     return () => {
       if (timerRef.current !== null) window.clearTimeout(timerRef.current);
+      if (luzTimerRef.current !== null) window.clearTimeout(luzTimerRef.current);
     };
   }, []);
 
-  function programarGuardado(p: PresentacionEscena) {
-    if (!activa) return;
-    const sceneId = activa.id;
+  function cancelarGuardadoPendiente() {
+    if (timerRef.current !== null) {
+      window.clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+  }
+
+  async function guardarPresentacionAhora(p: PresentacionEscena): Promise<boolean> {
+    if (!activa) return false;
+    cancelarGuardadoPendiente();
     setErrorLocal(null);
     setGuardado("guardando");
-    if (timerRef.current !== null) window.clearTimeout(timerRef.current);
-    timerRef.current = window.setTimeout(async () => {
-      try {
-        await api.post("/api/modules/escenarios/action", {
-          action: "set_presentacion",
-          scene_id: sceneId,
-          presentacion: p,
-        });
-        setGuardado("guardado");
-      } catch (e) {
-        setGuardado("error");
-        setErrorLocal(errorTexto(e));
-      }
+    try {
+      await api.post("/api/modules/escenarios/action", {
+        action: "set_presentacion",
+        scene_id: activa.id,
+        presentacion: p,
+      });
+      setGuardado("guardado");
+      return true;
+    } catch (e) {
+      setGuardado("error");
+      setErrorLocal(errorTexto(e));
+      return false;
+    }
+  }
+
+  function programarGuardado(p: PresentacionEscena) {
+    if (!activa) return;
+    setErrorLocal(null);
+    setGuardado("guardando");
+    cancelarGuardadoPendiente();
+    timerRef.current = window.setTimeout(() => {
+      timerRef.current = null;
+      void guardarPresentacionAhora(p);
     }, 420);
   }
 
@@ -126,7 +177,69 @@ export function ProyectorModule(_props: ModuleProps) {
     programarGuardado(siguiente);
   }
 
+  async function accionEscena(
+    accion: string,
+    payload: Record<string, unknown>,
+  ): Promise<EscenariosData | null> {
+    setErrorLocal(null);
+    try {
+      const res = await api.post<EscenariosData>("/api/modules/escenarios/action", {
+        action: accion,
+        ...payload,
+      });
+      setData(res);
+      return res;
+    } catch (e) {
+      setErrorLocal(errorTexto(e));
+      notify(errorTexto(e), "error");
+      return null;
+    }
+  }
+
+  function programarGuardadoLuz(color: string, opacity: number) {
+    if (!activa) return;
+    if (luzTimerRef.current !== null) window.clearTimeout(luzTimerRef.current);
+    luzTimerRef.current = window.setTimeout(() => {
+      luzTimerRef.current = null;
+      void api
+        .post<EscenariosData>("/api/modules/escenarios/action", {
+          action: "set_light",
+          scene_id: activa.id,
+          color,
+          opacity,
+        })
+        .then((res) => setData(res))
+        .catch((e) => {
+          setGuardado("error");
+          setErrorLocal(errorTexto(e));
+        });
+    }, 420);
+  }
+
+  /** Luz ambiental: la vista previa y el popup se actualizan al instante. */
+  function cambiarLuz(cambios: { color?: string; opacity?: number }) {
+    const color = cambios.color ?? luzColor;
+    const opacity = cambios.opacity ?? luzOpacidad;
+    setLuzColor(color);
+    setLuzOpacidad(opacity);
+    setGuardado("guardando");
+    programarGuardadoLuz(color, opacity);
+  }
+
+  function moverTokenEnMapa(token: TokenEscena, x: number, y: number) {
+    if (!activa) return;
+    void accionEscena("mover_token", {
+      scene_id: activa.id,
+      token_id: token.id,
+      x,
+      y,
+    }).then((res) => {
+      if (res) notify(`${token.nombre} → celda (${x}, ${y})`);
+    });
+  }
+
   async function activar(id: number, nombre: string) {
+    cancelarGuardadoPendiente();
     setAbriendo(true);
     setErrorLocal(null);
     try {
@@ -155,6 +268,7 @@ export function ProyectorModule(_props: ModuleProps) {
       notify("El mapa supera los 15 MB", "error");
       return;
     }
+    if (presentacion && !(await guardarPresentacionAhora(presentacion))) return;
     setSubiendo(true);
     setErrorLocal(null);
     try {
@@ -174,6 +288,7 @@ export function ProyectorModule(_props: ModuleProps) {
   async function quitarMapa() {
     if (!activa) return;
     if (!window.confirm("¿Quitar el mapa de esta escena?")) return;
+    if (presentacion && !(await guardarPresentacionAhora(presentacion))) return;
     setSubiendo(true);
     setErrorLocal(null);
     try {
@@ -186,6 +301,102 @@ export function ProyectorModule(_props: ModuleProps) {
     } finally {
       setSubiendo(false);
     }
+  }
+
+  function agregarEfecto(preset: PresetEfecto) {
+    if (!presentacion) return;
+    const efectos = presentacion.efectos ?? [];
+    if (efectos.length >= MAX_EFECTOS) {
+      notify(`Máximo ${MAX_EFECTOS} capas por escena`, "error");
+      return;
+    }
+    const nuevo: EfectoEscena = {
+      id: idEfecto(),
+      tipo: preset.tipo ?? "luz",
+      nombre: preset.nombre,
+      url: "",
+      tipo_archivo: "css",
+      patron: preset.patron ?? "radial",
+      color: preset.color ?? "#ffb347",
+      color2: preset.color2 ?? "#ff5c8a",
+      x: preset.x ?? 50,
+      y: preset.y ?? 50,
+      ancho: preset.ancho ?? 60,
+      alto: preset.alto ?? 60,
+      rotacion: preset.rotacion ?? 0,
+      opacidad: preset.opacidad ?? 0.55,
+      mezcla: preset.mezcla ?? "screen",
+      animacion: preset.animacion ?? "ninguna",
+      velocidad: preset.velocidad ?? 1,
+      suavizado: preset.suavizado ?? 18,
+      ajuste: preset.ajuste ?? "contain",
+      encima_tokens: preset.encima_tokens ?? false,
+      anclado_mapa: preset.anclado_mapa ?? false,
+      visible: preset.visible ?? true,
+    };
+    actualizar({ efectos: [...efectos, nuevo] });
+    setEfectoSeleccionado(nuevo.id);
+    notify(`Capa añadida: ${nuevo.nombre}`);
+  }
+
+  async function subirEfecto(archivo: File) {
+    if (!activa) return;
+    const extension = archivo.name.split(".").pop()?.toLowerCase() ?? "";
+    if (!EXTENSIONES_EFECTO.has(extension)) {
+      notify("Usa PNG, WEBP, GIF, APNG, MP4 o WEBM para las capas", "error");
+      return;
+    }
+    if (archivo.size > MAX_EFECTO) {
+      notify("La textura supera los 80 MB", "error");
+      return;
+    }
+    if (presentacion && !(await guardarPresentacionAhora(presentacion))) return;
+    setSubiendoEfecto(true);
+    setErrorLocal(null);
+    try {
+      const formulario = new FormData();
+      formulario.append("archivo", archivo);
+      const res = await api.upload<EscenariosData>(`/api/escenarios/${activa.id}/efectos`, formulario);
+      setData(res);
+      fijarPresentacion(res.activa?.presentacion ?? PRESENTACION_VACIA);
+      const efectos = res.activa?.presentacion?.efectos ?? [];
+      setEfectoSeleccionado(efectos[efectos.length - 1]?.id ?? null);
+      notify("Textura añadida a la escena");
+    } catch (e) {
+      setErrorLocal(errorTexto(e));
+    } finally {
+      setSubiendoEfecto(false);
+    }
+  }
+
+  async function quitarEfecto(id: string) {
+    if (!activa) return;
+    const efecto = presentacion?.efectos?.find((e) => e.id === id);
+    if (!efecto) return;
+    if (efecto.tipo === "textura" && !window.confirm(`¿Quitar «${efecto.nombre}» y borrar su archivo?`)) {
+      return;
+    }
+    if (presentacion && !(await guardarPresentacionAhora(presentacion))) return;
+    setEliminandoEfecto(id);
+    setErrorLocal(null);
+    try {
+      const res = await api.del<EscenariosData>(`/api/escenarios/${activa.id}/efectos/${encodeURIComponent(id)}`);
+      setData(res);
+      fijarPresentacion(res.activa?.presentacion ?? PRESENTACION_VACIA);
+      if (efectoSeleccionado === id) setEfectoSeleccionado(null);
+      notify("Capa retirada");
+    } catch (e) {
+      setErrorLocal(errorTexto(e));
+    } finally {
+      setEliminandoEfecto(null);
+    }
+  }
+
+  function editarEfecto(id: string, cambios: Partial<EfectoEscena>) {
+    if (!presentacion) return;
+    actualizar({
+      efectos: (presentacion.efectos ?? []).map((e) => (e.id === id ? { ...e, ...cambios } : e)),
+    });
   }
 
   function abrirProyector(enSegunda = false) {
@@ -369,6 +580,58 @@ export function ProyectorModule(_props: ModuleProps) {
           </section>
 
           <section className="rounded-xl border border-line bg-white/[0.02] p-3">
+            <div className="flex items-center justify-between gap-2">
+              <p className="text-[9px] uppercase tracking-[0.22em] text-slate-500">Luz ambiental</p>
+              <Badge color="slate">escena</Badge>
+            </div>
+            <div className="mt-2 space-y-3">
+              <Field label="Color" hint="velo sobre el mapa">
+                <div className="flex items-center gap-1.5">
+                  <input
+                    type="color"
+                    value={luzColor}
+                    onChange={(e) => cambiarLuz({ color: e.target.value })}
+                    className="h-8 w-10 cursor-pointer rounded border border-line bg-transparent"
+                    aria-label="Color de la luz ambiental"
+                  />
+                  <Input
+                    value={luzColor}
+                    onChange={(e) => cambiarLuz({ color: e.target.value })}
+                    className="h-8 py-1 font-mono text-[10px]"
+                  />
+                </div>
+              </Field>
+              <Field label="Intensidad" hint={`${Math.round(luzOpacidad * 100)}%`}>
+                <input
+                  type="range"
+                  min={0}
+                  max={0.9}
+                  step={0.01}
+                  value={luzOpacidad}
+                  onChange={(e) => cambiarLuz({ opacity: Number(e.target.value) })}
+                  className="h-1 w-full accent-[#f5b544]"
+                  aria-label="Intensidad de la luz ambiental"
+                />
+              </Field>
+              <p className="text-[10px] leading-relaxed text-slate-500">
+                El velo se pinta sobre el mapa y se sincroniza con el popup al instante; se guarda en la escena activa.
+              </p>
+            </div>
+          </section>
+
+          <ProjectorEffectsPanel
+            efectos={presentacion.efectos ?? []}
+            seleccionadoId={efectoSeleccionado}
+            onSeleccionar={setEfectoSeleccionado}
+            onAgregar={agregarEfecto}
+            onSubir={(archivo) => void subirEfecto(archivo)}
+            onQuitar={(id) => void quitarEfecto(id)}
+            onEditar={editarEfecto}
+            subiendo={subiendoEfecto}
+            eliminando={eliminandoEfecto}
+          />
+
+          <section className="rounded-xl border border-line bg-white/[0.02] p-3">
             <p className="text-[9px] uppercase tracking-[0.22em] text-slate-500">Imagen</p>
             <div className="mt-2 space-y-3">
               <Field label="Rotación" hint={`${presentacion.rotacion}°`}>
@@ -533,7 +796,12 @@ export function ProyectorModule(_props: ModuleProps) {
               e.preventDefault();
               setArrastrandoMapa(false);
               const archivo = e.dataTransfer.files?.[0];
-              if (archivo) void subirMapa(archivo);
+              if (!archivo) return;
+              if (archivo.type.startsWith("video/") || /\.(mp4|webm)$/i.test(archivo.name)) {
+                void subirEfecto(archivo);
+              } else {
+                void subirMapa(archivo);
+              }
             }}
           >
             <div
@@ -546,10 +814,16 @@ export function ProyectorModule(_props: ModuleProps) {
               onDoubleClick={() => actualizar({ zoom: 1, rotacion: 0, pan_x: 0, pan_y: 0 })}
             >
               <ProjectorStage
-                escena={activa}
+                escena={{ ...activa, light: { color: luzColor, opacity: luzOpacidad } }}
                 presentacion={presentacion}
                 grid={data.grid}
                 pantallaCm={pantallaCm}
+                efectosEditables
+                tokensEditables
+                efectoSeleccionado={efectoSeleccionado}
+                onSeleccionarEfecto={setEfectoSeleccionado}
+                onMoverEfecto={(id, x, y) => editarEfecto(id, { x, y })}
+                onMoverToken={moverTokenEnMapa}
                 className="h-full w-full"
               />
               <div className="pointer-events-none absolute left-2 top-2 flex gap-1">
@@ -559,6 +833,11 @@ export function ProyectorModule(_props: ModuleProps) {
                 {presentacion.mapa_url ? (
                   <span className="rounded-md border border-white/15 bg-black/45 px-1.5 py-0.5 text-[9px] uppercase tracking-wider text-white/70 backdrop-blur">
                     {activa.tokens.length} tokens
+                  </span>
+                ) : null}
+                {presentacion.efectos?.length ? (
+                  <span className="rounded-md border border-violet-300/25 bg-black/45 px-1.5 py-0.5 text-[9px] uppercase tracking-wider text-violet-200/80 backdrop-blur">
+                    {presentacion.efectos.length} capas
                   </span>
                 ) : null}
               </div>
@@ -574,7 +853,7 @@ export function ProyectorModule(_props: ModuleProps) {
 
           <div className="flex flex-wrap items-center justify-between gap-2 text-[10px] text-slate-500">
             <p>
-              Arrastra la vista para moverla · ajusta el zoom en el panel de imagen · doble clic para centrar.
+              Arrastra la vista para mover el mapa · arrastra un token a otra celda · selecciona una capa y arrástrala · doble clic para centrar.
             </p>
             <div className="flex items-center gap-1.5">
               <Badge color={presentacion.grid_visible ? "green" : "slate"}>rejilla {presentacion.grid_visible ? "ON" : "OFF"}</Badge>

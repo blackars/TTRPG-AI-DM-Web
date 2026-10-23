@@ -12,6 +12,7 @@ from db import ESCENARIOS_DIR, get_session
 from events import emit
 from models import Scene, SoundAsset
 from serializers import (
+    EXT_EFECTO_VIDEO, EXTENSIONES_EFECTO, MAX_EFECTOS, normalizar_efecto,
     normalizar_presentacion, presentacion_dict, scene_dict, sound_dict,
 )
 from utils import dumps, loads
@@ -21,6 +22,7 @@ router = APIRouter(tags=["escenarios"])
 GRID = {"cols": 12, "rows": 9}
 EXTENSIONES_MAPA = {".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif"}
 MAX_MAPA_BYTES = 15 * 1024 * 1024
+MAX_EFECTO_BYTES = 80 * 1024 * 1024
 
 
 class EscenaAccion(BaseModel):
@@ -56,7 +58,7 @@ def _presentacion_actual(escena: Scene) -> dict:
     return normalizar_presentacion(loads(escena.presentacion_json, {}))
 
 
-def _borrar_archivo_mapa(nombre: str) -> None:
+def _borrar_archivo(nombre: str) -> None:
     if not nombre:
         return
     archivo = ESCENARIOS_DIR / Path(nombre).name
@@ -157,7 +159,10 @@ def accion_escenarios(data: EscenaAccion, session: Session = Depends(get_session
         escena = _escena(session, data.id)
         if escena.activo:
             raise HTTPException(409, "No puedes borrar la escena activa; activa otra primero")
-        _borrar_archivo_mapa(_presentacion_actual(escena).get("mapa", ""))
+        actual = _presentacion_actual(escena)
+        _borrar_archivo(actual.get("mapa", ""))
+        for efecto in actual.get("efectos", []):
+            _borrar_archivo(efecto.get("archivo", ""))
         session.delete(escena)
         session.commit()
         emit(session, "escenario", "borrada", {"id": data.id})
@@ -276,7 +281,7 @@ async def subir_mapa(
     destino.write_bytes(contenido)
 
     actual = _presentacion_actual(escena)
-    _borrar_archivo_mapa(actual.get("mapa", ""))
+    _borrar_archivo(actual.get("mapa", ""))
     actual["mapa"] = nombre
     escena.presentacion_json = dumps(normalizar_presentacion(actual))
     session.add(escena)
@@ -290,10 +295,92 @@ def quitar_mapa(scene_id: int, session: Session = Depends(get_session)):
     """Quita el mapa de la escena y elimina el archivo subido."""
     escena = _escena(session, scene_id)
     actual = _presentacion_actual(escena)
-    _borrar_archivo_mapa(actual.get("mapa", ""))
+    _borrar_archivo(actual.get("mapa", ""))
     actual["mapa"] = ""
     escena.presentacion_json = dumps(normalizar_presentacion(actual))
     session.add(escena)
     session.commit()
     emit(session, "escenario", "mapa_quitado", {"scene_id": escena.id})
+    return _estado(session)
+
+
+@router.post("/api/escenarios/{scene_id}/efectos")
+async def subir_efecto(
+    scene_id: int,
+    archivo: UploadFile = File(...),
+    session: Session = Depends(get_session),
+):
+    """Sube una textura animada (PNG/WEBP/GIF/MP4) y la añade como capa."""
+    escena = _escena(session, scene_id)
+    sufijo = Path(archivo.filename or "").suffix.lower()
+    if sufijo not in EXTENSIONES_EFECTO:
+        raise HTTPException(
+            400,
+            "Formato no admitido. Usa PNG, WEBP, GIF, APNG, MP4 o WEBM.",
+        )
+    actual = _presentacion_actual(escena)
+    efectos = actual.get("efectos", [])
+    if len(efectos) >= MAX_EFECTOS:
+        raise HTTPException(400, f"Máximo {MAX_EFECTOS} efectos por escena.")
+
+    contenido = await archivo.read()
+    if not contenido:
+        raise HTTPException(400, "El archivo está vacío.")
+    if len(contenido) > MAX_EFECTO_BYTES:
+        raise HTTPException(413, "El efecto supera los 80 MB.")
+
+    nombre_base = Path(archivo.filename or "").stem.strip()[:60] or "Textura"
+    nombre_archivo = f"efecto-{escena.id}-{uuid.uuid4().hex[:10]}{sufijo}"
+    destino = ESCENARIOS_DIR / nombre_archivo
+    destino.write_bytes(contenido)
+
+    try:
+        es_video = sufijo in EXT_EFECTO_VIDEO
+        efecto = normalizar_efecto({
+            "tipo": "textura",
+            "nombre": nombre_base,
+            "archivo": nombre_archivo,
+            "x": 50, "y": 50, "ancho": 55, "alto": 55,
+            "opacidad": 0.82, "mezcla": "normal",
+            "animacion": "ninguna", "velocidad": 1,
+            "ajuste": "cover" if es_video else "contain",
+            "suavizado": 0,
+        })
+        if not efecto:
+            raise HTTPException(400, "No se pudo preparar el efecto.")
+        actual["efectos"] = [*efectos, efecto]
+        escena.presentacion_json = dumps(normalizar_presentacion(actual))
+        session.add(escena)
+        session.commit()
+    except Exception:
+        destino.unlink(missing_ok=True)
+        raise
+
+    emit(session, "escenario", "efecto", {
+        "scene_id": escena.id, "efecto_id": efecto["id"], "archivo": nombre_archivo,
+    })
+    return _estado(session)
+
+
+@router.delete("/api/escenarios/{scene_id}/efectos/{efecto_id}")
+def quitar_efecto(
+    scene_id: int,
+    efecto_id: str,
+    session: Session = Depends(get_session),
+):
+    """Quita una capa de efecto y borra su archivo si era una textura subida."""
+    escena = _escena(session, scene_id)
+    actual = _presentacion_actual(escena)
+    efectos = actual.get("efectos", [])
+    encontrado = next((e for e in efectos if e.get("id") == efecto_id), None)
+    if not encontrado:
+        raise HTTPException(404, "Efecto no encontrado")
+    _borrar_archivo(encontrado.get("archivo", ""))
+    actual["efectos"] = [e for e in efectos if e.get("id") != efecto_id]
+    escena.presentacion_json = dumps(normalizar_presentacion(actual))
+    session.add(escena)
+    session.commit()
+    emit(session, "escenario", "efecto_borrado", {
+        "scene_id": escena.id, "efecto_id": efecto_id,
+    })
     return _estado(session)

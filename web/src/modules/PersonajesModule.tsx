@@ -78,8 +78,13 @@ export function PersonajesModule(_props: ModuleProps) {
     }
   }, [data, selected, setSelected]);
 
-  async function ejecutar(accion: string, payload: Record<string, unknown>, mensaje?: string) {
-    setCargando(accion);
+  async function ejecutar(
+    accion: string,
+    payload: Record<string, unknown>,
+    mensaje?: string,
+    clave: string = accion,
+  ) {
+    setCargando(clave);
     setErrorLocal(null);
     try {
       const res = await api.post<PersonajesData>("/api/modules/personajes/action", {
@@ -220,7 +225,12 @@ export function PersonajesModule(_props: ModuleProps) {
                   variant="ghost"
                   disabled={p.en_escena || !data.escena_activa}
                   loading={cargando === `enviar-${p.id}`}
-                  onClick={() => void ejecutar("enviar_a_escena", { id: p.id }, `${p.nombre} enviado al tablero`)}
+                  onClick={() => void ejecutar(
+                    "enviar_a_escena",
+                    { id: p.id },
+                    `${p.nombre} enviado al tablero`,
+                    `enviar-${p.id}`,
+                  )}
                 >
                   {p.en_escena ? "En tablero" : "→ Tablero"}
                 </Button>

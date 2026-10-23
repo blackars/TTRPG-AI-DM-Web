@@ -201,6 +201,56 @@ Sesión 1 (MVP M0–M9): **2026-10-22**. Sesión 2 (Biblioteca M10): **2026-10-2
 
 ---
 
+## Sesión 4 — Luces y efectos (M12)
+
+**Fecha:** 2026-10-23. **Objetivo:** añadir capas de ambiente al proyector y cerrar el arrastre real de tokens sin romper la escena activa, el mapa ni la rejilla.
+
+### Qué se hizo
+
+- `serializers.py` añade `normalizar_efecto()` y `efecto_dict()`: valida tipo, patrón, colores, mezcla, animación, posición, tamaño, opacidad y archivo; al guardar de nuevo una presentación recupera el nombre interno desde la URL pública.
+- `scenes.py` añade `POST /api/escenarios/{id}/efectos` y `DELETE /api/escenarios/{id}/efectos/{efecto_id}`. Los archivos van a `api/data/escenarios/`, se sirven por `/escenas-assets/` y se borran al quitar la capa o la escena.
+- Límites: 24 capas por escena y 80 MB por textura. El mapa conserva su límite de 15 MB.
+- `context.py` publica un resumen de efectos en `table_state`; la API sigue entregando el detalle completo a la web.
+- `ProjectorEffects.tsx` pinta luces, nieblas, portales y texturas con `mix-blend-mode`, animaciones CSS y vídeo MP4/WEBM. Las capas usan z-index 15 (25 con `encima_tokens`), por encima de la rejilla y por debajo o por encima de los tokens según la capa.
+- `ProjectorEffectsPanel.tsx` incorpora los presets **Luz cálida**, **Niebla**, **Portal**, **Aurora** y **Bruma densa**, subida de texturas y controles de edición.
+- `ProjectorStage.tsx` permite arrastrar cada capa en la vista previa con pointer events; el arrastre detiene la propagación para no panear el mapa.
+- `SceneBoard.tsx` incorpora arrastre real de tokens a otra celda, con captura de puntero, umbral de 5 px y persistencia vía `mover_token`; `EscenarioModule` actualiza la selección y el tablero.
+- `PersonajesModule` usa una clave de carga por personaje (`enviar-${id}`) para que el feedback de «enviando» no se mezcle entre fichas.
+- Documentación actualizada: `README.md`, `MODULES.md`, `ROADMAP.md` y este diario.
+
+### Decisiones y detalles
+
+- Las capas se guardan dentro de `Scene.presentacion_json`; no se añadió una tabla nueva. Las posiciones son porcentajes del lienzo proyectado para que la vista previa y el popup mantengan la composición.
+- La URL de las texturas se guarda relativa; el frontend antepone `API_URL`. El backend reconstruye el archivo interno desde la URL al recibir una presentación pública.
+- Las capas quedan debajo de los tokens por defecto; `encima_tokens` permite que una niebla o un portal cubran las fichas.
+- El debounce de guardado se cancela antes de subir/quitar mapas o efectos para que un guardado tardío no recree capas borradas.
+
+### Verificación
+
+- `pytest -q`: **21 passed** (nuevos tests de efectos, URLs públicas, borrado y limpieza de assets).
+- `npx tsc --noEmit`: sin errores.
+- `npm run build`: Next.js 14.2.35 compila correctamente.
+- Prueba CDP real: añadir Luz cálida, arrastrarla sin mover el mapa, activar «encima de tokens», subir una textura PNG, comprobar su URL y su carga en el popup `/proyector`, borrar las capas y dejar la escena limpia. **0 errores de consola.**
+- Prueba CDP de tokens: crear un token temporal, arrastrarlo de (1,1) a (5,4), verificar la persistencia en la API y borrarlo; la escena queda con 0 tokens.
+- Incidencia corregida: durante una primera prueba, un selector ambiguo tomó el input del mapa y subió un PNG de 1×1. Se recuperó el archivo original desde la caché HTTP de Chrome (coincidencia SHA-256 con la copia de Descargas), se restauró en su URL original `escena-4-0be7b8893d.webp` y el script de prueba ahora selecciona el input de textura por `accept` y hace snapshot/restauración del mapa. La escena, el zoom, la rotación, el paneo y la rejilla del usuario quedaron intactos.
+
+### Cierre de M12 (mismo día)
+
+Los cuatro puntos que quedaban inconclusos se terminaron en la misma sesión:
+
+- **Arrastre de tokens en el mapa del proyector.** `ProjectorStage` acepta `tokensEditables` y `onMoverToken`; la vista previa de la sala convierte el puntero a celda invirtiendo la transformación del mapa (pan, rotación y zoom) y persiste con `mover_token`. El popup no recibe la prop y sigue siendo de solo lectura.
+- **Tablero editable en el catálogo de escenas.** El modal de edición de `EscenariosModule` deja de usar `readonly`: selección de token, arrastre, clic en casilla para mover o colocar (con su propio modal de nombre/emoji) y botón **Quitar token**.
+- **Controles de luz ambiente en la sala de proyección.** `ProyectorModule` añade color e intensidad con guardado automático (`set_light` con debounce de 420 ms); la luz local se inyecta en el estado publicado para que el popup la reciba al instante.
+- **Anclar overlays al recuadro del mapa.** `normalizar_efecto` persiste `anclado_mapa`; las capas ancladas se pintan en una capa transformada idéntica a la del mapa (z 15, o 25 con `encima_tokens`) y su arrastre se mide en el espacio local de la imagen.
+
+### Pendientes conscientes
+
+- Guardar la calibración física por pantalla en el backend.
+- Gestos táctiles de zoom/rotación para la vista previa.
+- Validar el comportamiento de texturas animadas grandes en equipos de gama baja y ofrecer un modo de reducción de calidad.
+
+---
+
 ## Publicación
 
 - Repo oficial: `https://github.com/blackars/TTRPG-AI-DM-Web` (rama `main`).

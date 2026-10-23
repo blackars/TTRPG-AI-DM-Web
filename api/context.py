@@ -112,6 +112,14 @@ def build_context(session: Session) -> dict:
             "grid_visible": bool((escena_dict or {}).get("presentacion", {}).get("grid_visible", True)),
             "grid_cm": (escena_dict or {}).get("presentacion", {}).get("grid_cm", 2.5),
             "mapa_url": (escena_dict or {}).get("presentacion", {}).get("mapa_url", ""),
+            "efectos": [
+                {
+                    "nombre": e.get("nombre", ""),
+                    "tipo": e.get("tipo", ""),
+                    "visible": bool(e.get("visible", True)),
+                }
+                for e in (escena_dict or {}).get("presentacion", {}).get("efectos", [])
+            ],
             "tokens": escena_dict["tokens"] if escena_dict else [],
         },
     }
