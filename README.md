@@ -13,7 +13,7 @@ Mesa de rol digital con **módulos componibles**, pantallas persistidas y un **a
 Requisitos: Python 3.10, Node.js 22 y PowerShell.
 
 ```powershell
-cd "C:\Users\OSCAR\Desktop\G I T H U B R E P O S\TTRPG-Assistant"
+cd "C:\Users\OSCAR\Desktop\TTRPG-AI-DM"
 
 # 1) Dependencias (solo la primera vez)
 python -m venv api\.venv

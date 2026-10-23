@@ -9,8 +9,8 @@ Fecha de la sesión principal: **2026-10-22**.
 
 ### Contexto de arranque
 
-- Proyecto nuevo en `C:\Users\OSCAR\Desktop\G I T H U B R E P O S\TTRPG-Assistant`.
-- Referencias de solo lectura: `TTRPG-AI-DM` (reglas JEV, estilo DM, router de IA) y `MiniBase-Web` (solo contrato, sin arrancar).
+- Proyecto nuevo, hoy ubicado en `C:\Users\OSCAR\Desktop\TTRPG-AI-DM`.
+- Referencias de solo lectura: `parte vieja` (reglas JEV, estilo DM, router de IA) y `MiniBase-Web` (solo contrato, sin arrancar).
 - Puertos reservados: API **8100**, web **3010**. No se tocaron 8000/3000/8010.
 - Todo el código, docs y mensajes en español.
 
