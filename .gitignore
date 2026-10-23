@@ -26,6 +26,7 @@ htmlcov/
 web/node_modules/
 web/.next/
 web/out/
+*.tsbuildinfo
 npm-debug.log*
 yarn-error.log*
 pnpm-debug.log*

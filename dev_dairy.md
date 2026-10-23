@@ -1,7 +1,7 @@
 # Diario de desarrollo — TTRPG-Assistant
 
 Bitácora de construcción y memoria operativa. Se actualiza al cerrar cada fase.
-Fecha de la sesión principal: **2026-10-22**.
+Sesión 1 (MVP M0–M9): **2026-10-22**. Sesión 2 (Biblioteca M10): **2026-10-23**.
 
 ---
 
@@ -113,6 +113,49 @@ Fecha de la sesión principal: **2026-10-22**.
 - «Los dados mandan en Python; el 3D solo actúa.»
 - «Si un módulo nuevo no está en el registry y en el contexto, no existe.»
 - «MiniBase es un invitado de solo lectura; nunca bloquea la mesa.»
+
+---
+
+## Sesión 2 — Biblioteca TTRPG (M10)
+
+**Fecha:** 2026-10-23. **Objetivo:** integrar la biblioteca de fichas y documentos en la app sin romper la interfaz clásica ni el MVP M0–M9.
+
+### Qué se hizo
+
+- Copiada la biblioteca de referencia a `biblioteca/`, con fichas, índices, assets, herramientas, PDF y la interfaz estática.
+- Añadidas tres entradas universales: `panorama-sistemas-rol` (guía del PDF), `mythic-gme` (oráculo) y `sistemas-genericos` (GURPS, Fate, Savage Worlds, Cypher y BRP).
+- Creada `biblioteca/taxonomia.json` para clasificar las 48 entradas por categoría, tipo de UI, familia, motor, dados, recursos y alias. Los nombres confusos se corrigieron con `titulo_ui` (`Cyberpunk OSR y derivados`, `Wargames de ciencia ficción`, `Arkham Horror (juegos de mesa)`, `Investigación alternativa (GUMSHOE y PbtA)`, etc.).
+- `build_index.py` ahora mezcla la taxonomía y regenera `datos.js`, `fichas.json` e `INDICE.md`; el `tipo` original se conserva para la interfaz clásica.
+- Copiado el PDF a `biblioteca/documentos/principales-sistemas-de-rol-de-mesa.pdf`. La API lo extrae con `pypdf` y lo cachea como texto.
+- Nuevo `api/library.py`: parser Markdown, catálogo, detalle, personalización, enlaces, documentos, vínculos, selección activa y contexto IA.
+- Nuevo `api/modules/biblioteca.py`: contrato `state/action`, acciones `seleccionar`, `limpiar`, `vincular_documento`, `desvincular_documento` y `mythic_tirar`; endpoints REST de fichas, documentos, subida, descarga y borrado.
+- Mythic ampliado en `api/rules/builtin/mythic.py`: foco de evento, descriptor, ajuste de escena y evento completo. Las tiradas se resuelven en backend y se guardan en `dice_logs`.
+- Registro gemelo actualizado: `biblioteca` en `web/src/modules/registry.tsx` y `api/registry.py`; nueva pantalla `biblioteca` y migración idempotente `ensure_library_screen()` para bases ya sembradas.
+- Nuevo `web/src/modules/BibliotecaModule.tsx` con catálogo, búsqueda y filtros, detalle Markdown, activación del sistema, generadores y pestaña de material propio.
+- Añadido `web/src/components/MarkdownView.tsx` con `react-markdown` + `remark-gfm` y estilos propios; instalado también un icono SVG para evitar el 404 de favicon.
+- `api/context.py` incorpora `biblioteca` y su badge; el prompt del asistente recibe `sistema_activo`, `ficha_base`, `personalizacion` y `documentos_vinculados`.
+- Documentación actualizada: `README.md`, `MODULES.md`, `ROADMAP.md`, `biblioteca/README.md` y `biblioteca/assets/logos/README.md`.
+
+### Decisiones y detalles
+
+- La fuente editable sigue siendo `biblioteca/`; la API lee los archivos en caliente. Las subidas del usuario van a `api/data/biblioteca/` y no se versionan.
+- La personalización vacía se detecta y no se envía al prompt: evita gastar contexto en el texto de plantilla.
+- La selección activa y los vínculos se guardan en `app_kv`; no se creó una tabla nueva para el MVP.
+- `biblioteca` no ejecuta acciones de la IA por su cuenta: el usuario activa, vincula y tira desde la UI.
+- Los logos oficiales no se incluyen por derechos; el fallback es emoji + color y el soporte de `logo:` queda documentado.
+
+### Verificación
+
+- `pytest -q`: **17 passed** (nuevos tests de catálogo, detalle, contexto, documentos, vínculos, Mythic, PDF e interfaz clásica).
+- `npm run build`: Next.js 14.2.35 compila sin errores de tipos.
+- Prueba CDP real: abrir Biblioteca, leer una ficha, activar D&D 5e, quitarla, cambiar a Generadores, tirar Mythic, abrir Mi material y comprobar el PDF. Sin errores de consola; el único 404 era `favicon.ico`, corregido con `web/src/app/icon.svg`.
+- La DB de demo se deja sin sistema activo ni tiradas Mythic de prueba.
+
+### Pendientes conscientes
+
+- Revisar una a una las campañas y recursos enlazados (la biblioteca original no verificó todos).
+- Añadir logos con licencia clara; hoy todas las fichas usan emoji.
+- Medir el contexto con un modelo real y, si hace falta, resumir fichas largas o buscar por secciones.
 
 ---
 

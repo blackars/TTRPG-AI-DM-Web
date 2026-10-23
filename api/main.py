@@ -10,11 +10,12 @@ from sqlmodel import Session
 
 from ai import config as ai_config
 from db import DATA_DIR, SOUNDS_DIR, TOKENS_DIR, engine, init_db
+from library import BIBLIOTECA_DIR
 from modules import (
-    assistant, characters, core, dice, inventory, minibase, npcs, rules, saves,
-    scenes, sounds,
+    assistant, biblioteca, characters, core, dice, inventory, minibase, npcs, rules,
+    saves, scenes, sounds,
 )
-from seeds import seed_all
+from seeds import ensure_library_screen, seed_all
 
 VERSION = "1.0.0"
 
@@ -41,6 +42,8 @@ async def lifespan(app: FastAPI):
     _placeholder_token()
     with Session(engine) as session:
         seed_all(session)
+    with Session(engine) as session:
+        ensure_library_screen(session)
     yield
 
 
@@ -74,9 +77,20 @@ app.include_router(saves.router)
 app.include_router(sounds.router)
 app.include_router(npcs.router)
 app.include_router(minibase.router)
+app.include_router(biblioteca.router)
 
 app.mount("/sounds", StaticFiles(directory=str(SOUNDS_DIR)), name="sounds")
 app.mount("/tokens", StaticFiles(directory=str(TOKENS_DIR)), name="tokens")
+app.mount(
+    "/biblioteca-clasica",
+    StaticFiles(directory=str(BIBLIOTECA_DIR), html=True),
+    name="biblioteca-clasica",
+)
+app.mount(
+    "/biblioteca-assets",
+    StaticFiles(directory=str(BIBLIOTECA_DIR / "assets")),
+    name="biblioteca-assets",
+)
 
 
 @app.get("/health")

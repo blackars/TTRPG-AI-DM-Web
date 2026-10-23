@@ -18,6 +18,7 @@ from serializers import character_dict, dice_dict, npc_dict, scene_dict, sound_d
 from rules.catalog import mix_texto, resumen_reglas
 from rules.service import mix_actual
 from utils import loads
+import library as biblioteca
 
 
 def _personajes_con_inventario(session: Session) -> list[dict]:
@@ -57,6 +58,7 @@ def build_context(session: Session) -> dict:
     mensajes = session.exec(select(AiMessage)).all()
     enlaces = session.exec(select(MiniLink)).all()
     notas = session.get(AppKv, "notas_mesa")
+    biblioteca_ctx = biblioteca.contexto(session)
 
     activos = mix.get("activos", [])
     badges = {
@@ -75,6 +77,7 @@ def build_context(session: Session) -> dict:
         "partidas": len(saves),
         "asistente": len(mensajes),
         "minibase": len(enlaces),
+        "biblioteca": int(biblioteca_ctx.get("catalogo_total", 0)),
         "editor": len(pantallas),
     }
 
@@ -103,6 +106,7 @@ def build_context(session: Session) -> dict:
             "configurado": bool(os.environ.get("MINIBASE_URL")),
             "enlaces": len(enlaces),
         },
+        "biblioteca": biblioteca_ctx,
         "table_state": {
             "phase": "narrativa",
             "grid_visible": True,

@@ -7,6 +7,7 @@ Mesa de rol digital con **módulos componibles**, pantallas persistidas y un **a
 - **Dados:** motor autoritativo en Python + animación 2D (SVG/CSS) y 3D (three.js)
 - **IA:** router `glm → local → openai → mock`; funciona sin claves gracias al mock contextual
 - **MiniBase:** integración opcional de fase M9, **solo lectura** y no bloqueante
+- **Biblioteca TTRPG:** fichas de sistemas, wargames, literatura y documentos propios; activa el sistema de la mesa y alimenta al DM
 
 ## Arranque rápido (Windows)
 
@@ -48,6 +49,8 @@ Abre **`http://127.0.0.1:3010/pantalla/mesa`**. La base de datos y los seeds se 
 | `http://127.0.0.1:3010/pantalla/inventario` | Inventarios por personaje/criatura |
 | `http://127.0.0.1:3010/pantalla/cronicas` | Partidas guardadas y NPCs |
 | `http://127.0.0.1:3010/pantalla/escenas` | Catálogo de escenas |
+| `http://127.0.0.1:3010/pantalla/biblioteca` | Biblioteca TTRPG, sistema activo y generadores |
+| `http://127.0.0.1:8100/biblioteca-clasica/index.html` | Interfaz clásica de la biblioteca (sin build) |
 | `http://127.0.0.1:3010/proyector` | Vista limpia para el segundo monitor |
 | `http://127.0.0.1:8100/docs` | OpenAPI interactivo |
 | `http://127.0.0.1:8100/api/assistant/context` | Contexto completo que consume la IA |
@@ -105,6 +108,23 @@ El adaptador vive en `api/modules/minibase.py` y el módulo en `web/src/modules/
 - Si MiniBase no responde, la app sigue funcionando con datos locales y muestra el estado desconectado.
 - **No se enciende ni se modifica** el proyecto MiniBase desde este repositorio.
 
+## Biblioteca TTRPG (M10)
+
+La biblioteca vive en `biblioteca/` y se integra como módulo, no como una pantalla aislada.
+
+- **Fichas:** 48 entradas (sistemas, colecciones, wargames, juegos de mesa, literatura y guías) en Markdown con front matter. La interfaz clásica sigue disponible en `/biblioteca-clasica/index.html`.
+- **Clasificación:** `biblioteca/taxonomia.json` añade categoría, tipo de UI, familia mecánica, motor, dados, recursos y alias sin reescribir los Markdown originales.
+- **Sistema activo:** al pulsar «Usar como sistema activo», el DM recibe la ficha, tu sección de personalización y los documentos vinculados.
+- **Mi material:** sube aventuras propias en `.md`, `.txt` o `.pdf`. Los PDF se extraen con `pypdf`; todo se guarda en `api/data/biblioteca/` y no se versiona.
+- **Generadores Mythic:** pregunta sí/no con caos, significado de evento, evento completo y ajuste de escena. La tirada se resuelve en el backend y queda en `dice_logs`.
+- **PDF de referencia:** `biblioteca/documentos/principales-sistemas-de-rol-de-mesa.pdf` alimenta la guía `panorama-sistemas-rol` con las familias d20, d100/BRP, PbtA, Fate y 3D6/GURPS.
+
+Para regenerar los índices y la interfaz clásica después de editar fichas:
+
+```powershell
+python biblioteca\tools\build_index.py
+```
+
 ## Pruebas
 
 ```powershell
@@ -117,7 +137,7 @@ cd web
 npm run build
 ```
 
-Resultado actual: **14 tests backend en verde** y build de Next.js sin errores.
+Resultado actual: **17 tests backend en verde** y build de Next.js sin errores.
 
 ## Estructura
 
@@ -136,7 +156,8 @@ TTRPG-Assistant/
 │     ├─ app/              Rutas App Router
 │     ├─ components/       Shell, slots, overlays, tablero, dados 3D
 │     ├─ lib/              API tipada, store, audio, acciones IA
-│     └─ modules/          Los 16 módulos + registry.tsx
+│     └─ modules/          Los 17 módulos + registry.tsx
+├─ biblioteca/             Fichas, taxonomía, documentos y build_index.py
 ├─ iniciar.ps1             Arranque de API + web en Windows
 ├─ ROADMAP.md
 ├─ MODULES.md
@@ -145,4 +166,4 @@ TTRPG-Assistant/
 
 ## Estado del MVP
 
-Las fases **M0–M9** están implementadas. El checklist completo de demo está marcado en `ROADMAP.md`. Quedan como mejoras posteriores (no bloqueantes): drag & drop real de tokens, subida de archivos de audio desde la UI, módulo de visión futura y publicación opcional del `table_state` en el proyector de MiniBase.
+Las fases **M0–M10** están implementadas. El checklist completo de demo está marcado en `ROADMAP.md`. Quedan como mejoras posteriores (no bloqueantes): drag & drop real de tokens, subida de archivos de audio desde la UI, módulo de visión futura y publicación opcional del `table_state` en el proyector de MiniBase.

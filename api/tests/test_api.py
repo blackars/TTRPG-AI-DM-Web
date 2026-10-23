@@ -331,3 +331,83 @@ def test_eventos_bus(client):
     r = client.get(f"/api/events?since={max(0, latest - 5)}")
     assert r.status_code == 200
     assert "events" in r.json()
+
+
+def test_biblioteca_catalogo_ficha_y_contexto(client):
+    r = client.get("/api/modules/biblioteca/state")
+    assert r.status_code == 200
+    estado = r.json()
+    assert estado["total"] >= 48
+    assert any(f["id"] == "dnd-5e" for f in estado["catalogo"])
+    assert any(c["valor"] == "rol" for c in estado["facetas"]["categorias"])
+    assert any(c["valor"] == "universal" for c in estado["facetas"]["generos"])
+
+    r = client.post(
+        "/api/modules/biblioteca/action",
+        json={"action": "seleccionar", "ficha_id": "dnd-5e"},
+    )
+    assert r.status_code == 200
+    assert r.json()["sistema_activo"]["id"] == "dnd-5e"
+
+    detalle = client.get("/api/biblioteca/fichas/dnd-5e").json()
+    assert detalle["titulo"] == "D&D 5e / 2024"
+    assert "d20" in detalle["motor"].lower()
+    assert len(detalle["contenido"]) > 1000
+
+    ctx = client.get("/api/assistant/context").json()
+    assert ctx["biblioteca"]["sistema_activo"]["id"] == "dnd-5e"
+    assert "D&D" in ctx["biblioteca"]["ficha_base"]
+    assert ctx["badges_de_modulos"]["biblioteca"] >= 48
+
+
+def test_biblioteca_documentos_vinculos_y_mythic(client):
+    texto = "Aventura de prueba.\n\nLa puerta del faro está cerrada."
+    r = client.post(
+        "/api/biblioteca/documentos",
+        files={"archivo": ("aventura-prueba.txt", texto.encode("utf-8"), "text/plain")},
+        data={"sistema_id": "call-of-cthulhu"},
+    )
+    assert r.status_code == 200
+    doc = r.json()["documento"]
+    assert doc["tipo"] == "txt"
+
+    docs = client.get("/api/biblioteca/documentos").json()["documentos"]
+    assert any(d["id"] == doc["id"] and d["sistema_id"] == "call-of-cthulhu" for d in docs)
+
+    leido = client.get(f"/api/biblioteca/documentos/{doc['id']}").json()
+    assert "faro" in leido["contenido"]
+
+    r = client.post(
+        "/api/modules/biblioteca/action",
+        json={"action": "seleccionar", "ficha_id": "call-of-cthulhu"},
+    )
+    assert r.status_code == 200
+    ctx = client.get("/api/biblioteca/contexto").json()
+    assert any(d["id"] == doc["id"] for d in ctx["documentos_vinculados"])
+
+    r = client.post(
+        "/api/modules/biblioteca/action",
+        json={"action": "mythic_tirar", "tipo": "completo", "pregunta": "¿Hay una trampa?"},
+    )
+    assert r.status_code == 200
+    resultado = r.json()["resultado"]
+    assert resultado["foco"]["texto"]
+    assert resultado["accion"]
+    assert resultado["sujeto"]
+    assert len(resultado["tiradas"]) == 4
+
+    r = client.delete(f"/api/biblioteca/documentos/{doc['id']}")
+    assert r.status_code == 200
+
+
+def test_biblioteca_pdf_y_version_clasica(client):
+    estado = client.get("/api/modules/biblioteca/state").json()
+    pdf = next(d for d in estado["documentos"] if d["tipo"] == "pdf")
+    leido = client.get(f"/api/biblioteca/documentos/{pdf['id']}", params={"max_chars": 4000}).json()
+    assert leido["tipo"] == "pdf"
+    assert leido["caracteres"] > 1000
+    assert "d20" in leido["contenido"].lower()
+
+    r = client.get("/biblioteca-clasica/index.html")
+    assert r.status_code == 200
+    assert "Biblioteca TTRPG" in r.text

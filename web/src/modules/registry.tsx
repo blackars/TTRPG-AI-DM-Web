@@ -18,6 +18,7 @@ import { NpcsModule } from "./NpcsModule";
 import { PartidasModule } from "./PartidasModule";
 import { AsistenteModule } from "./AsistenteModule";
 import { MiniBaseModule } from "./MiniBaseModule";
+import { BibliotecaModule } from "./BibliotecaModule";
 import { EditorModule } from "./EditorModule";
 
 export interface ModuleDef extends ModuleMetaApi {
@@ -103,6 +104,11 @@ const DEFINICIONES: Array<ModuleDef> = [
     id: "minibase", nombre: "MiniBase", icono: "🧩",
     descripcion: "Búsqueda e importación opcional de minis reales (fase M9, read-only).",
     slot: "lateral", overlay: false, singleton: true, Component: MiniBaseModule,
+  },
+  {
+    id: "biblioteca", nombre: "Biblioteca TTRPG", icono: "📚",
+    descripcion: "Fichas de sistemas, wargames, literatura y documentos; sistema activo y generadores Mythic.",
+    slot: "principal", overlay: false, singleton: true, Component: BibliotecaModule,
   },
   {
     id: "editor", nombre: "Editor de pantallas", icono: "🧰",

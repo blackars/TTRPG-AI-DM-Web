@@ -11,13 +11,14 @@ export class ApiError extends Error {
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const url = path.startsWith("http") ? path : `${API_URL}${path}`;
+  const esFormData = typeof FormData !== "undefined" && init?.body instanceof FormData;
   let res: Response;
   try {
     res = await fetch(url, {
       ...init,
       cache: "no-store",
       headers: {
-        "Content-Type": "application/json",
+        ...(esFormData ? {} : { "Content-Type": "application/json" }),
         ...(init?.headers || {}),
       },
     });
@@ -42,6 +43,8 @@ export const api = {
   get: <T>(path: string) => request<T>(path),
   post: <T>(path: string, body: unknown = {}) =>
     request<T>(path, { method: "POST", body: JSON.stringify(body) }),
+  upload: <T>(path: string, body: FormData) =>
+    request<T>(path, { method: "POST", body }),
   patch: <T>(path: string, body: unknown = {}) =>
     request<T>(path, { method: "PATCH", body: JSON.stringify(body) }),
   del: <T>(path: string) => request<T>(path, { method: "DELETE" }),

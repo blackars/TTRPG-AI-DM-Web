@@ -1,5 +1,5 @@
 """Seeds placeholder: 3 personajes, 2 criaturas, 18 items, 3 escenas, reglas,
-NPCs, sonidos sintéticos y 7 pantallas componibles. Idempotente por versión.
+NPCs, sonidos sintéticos y 8 pantallas componibles. Idempotente por versión.
 """
 from __future__ import annotations
 
@@ -266,6 +266,10 @@ def seed_all(session: Session) -> bool:
         "principal": [("escenarios", {}, False), ("escenario", {}, False)],
         "lateral": [("estado", {}, True)],
     })
+    _pantalla(session, "Biblioteca", "biblioteca", 7, {
+        "principal": [("biblioteca", {}, False)],
+        "lateral": [("estado", {}, True)],
+    })
 
     # --------------------------------------------------------------- memoria IA
     session.add(AiMessage(
@@ -294,5 +298,22 @@ def seed_all(session: Session) -> bool:
     })))
 
     session.add(AppKv(key="seed_version", value_json=dumps({"version": SEED_VERSION})))
+    session.commit()
+    return True
+
+
+def ensure_library_screen(session: Session) -> bool:
+    """Añade la pantalla Biblioteca a bases de datos ya sembradas.
+
+    Es una migración de datos idempotente: no toca pantallas existentes ni
+    duplica módulos. Devuelve True si ha creado la pantalla.
+    """
+    existente = session.exec(select(Screen).where(Screen.slug == "biblioteca")).first()
+    if existente:
+        return False
+    _pantalla(session, "Biblioteca", "biblioteca", 7, {
+        "principal": [("biblioteca", {}, False)],
+        "lateral": [("estado", {}, True)],
+    })
     session.commit()
     return True

@@ -1,0 +1,2139 @@
+{
+  "generado": "2026-10-22",
+  "total": 48,
+  "fichas": [
+    {
+      "id": "stargrave",
+      "titulo": "Stargrave",
+      "titulo_original": "Stargrave",
+      "genero": "ciencia-ficcion",
+      "genero_label": "Ciencia ficción",
+      "tipo": "ficha",
+      "tipo_ui": "sistema",
+      "tipo_label": "Sistema",
+      "categoria": "wargame",
+      "categoria_label": "Wargame",
+      "familia": "d20",
+      "familia_label": "d20",
+      "motor": "d20 de escaramuza",
+      "dados": [
+        "d20"
+      ],
+      "recursos": [
+        "miniaturas",
+        "cartas",
+        "campaña",
+        "solo-coop"
+      ],
+      "alias": [
+        "Stargrave",
+        "escaramuza sci-fi",
+        "galaxia devastada"
+      ],
+      "icono": "🛰️",
+      "color": "#f59e0b",
+      "tags": [
+        "ciencia-ficcion",
+        "minis",
+        "cartas",
+        "solo-coop",
+        "campaña"
+      ],
+      "resumen": "Un juego de escaramuzas en la «galaxia devastada»: cada jugador crea un capitán y un primer oficial (con trasfondos como cyborg, experto en robots, místico, pícaro o psiónico), recluta…",
+      "fuente": "BIBLIOTECA_TTRPG.md §4.1",
+      "seccion": "4.1",
+      "orden": 401,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/ciencia-ficcion/stargrave.md"
+    },
+    {
+      "id": "vieja-estrella",
+      "titulo": "Vieja Estrella",
+      "titulo_original": "Vieja Estrella",
+      "genero": "ciencia-ficcion",
+      "genero_label": "Ciencia ficción",
+      "tipo": "ficha",
+      "tipo_ui": "sistema",
+      "tipo_label": "Sistema",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "osr",
+      "familia_label": "OSR",
+      "motor": "OSR d20",
+      "dados": [
+        "d20"
+      ],
+      "recursos": [
+        "reglas",
+        "gratis",
+        "español"
+      ],
+      "alias": [
+        "Vieja Estrella",
+        "retroclon",
+        "OSR español"
+      ],
+      "icono": "⭐",
+      "color": "#38bdf8",
+      "tags": [
+        "ciencia-ficcion",
+        "osr",
+        "gratis",
+        "español"
+      ],
+      "resumen": "Un retroclon OSR en español para ciencia ficción, hermano de Vieja Escuela (fantasía). Reglas ligeras, clases/arquetipos, talentos, poderes de los Místicos y reglas de bioformas. Está…",
+      "fuente": "BIBLIOTECA_TTRPG.md §4.2",
+      "seccion": "4.2",
+      "orden": 402,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/ciencia-ficcion/vieja-estrella.md"
+    },
+    {
+      "id": "cyberpunk",
+      "titulo": "Cyberpunk 2020 / RED",
+      "titulo_original": "Cyberpunk 2020 / RED",
+      "genero": "ciencia-ficcion",
+      "genero_label": "Ciencia ficción",
+      "tipo": "ficha",
+      "tipo_ui": "sistema",
+      "tipo_label": "Sistema",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "d10-pool",
+      "familia_label": "d10 pool",
+      "motor": "Interlock d10",
+      "dados": [
+        "d10"
+      ],
+      "recursos": [
+        "reglas",
+        "dados",
+        "miniaturas",
+        "ciberware"
+      ],
+      "alias": [
+        "Cyberpunk 2020",
+        "Cyberpunk RED",
+        "Night City",
+        "Mike Pondsmith"
+      ],
+      "icono": "🌆",
+      "color": "#f43f5e",
+      "tags": [
+        "ciencia-ficcion",
+        "cyberpunk",
+        "minis",
+        "d10"
+      ],
+      "resumen": "Cyberpunk 2020 y RED: Night City, corporaciones, ciberware y netrunning. Dos generaciones del clásico de Mike Pondsmith.",
+      "fuente": "BIBLIOTECA_TTRPG.md §4.3",
+      "seccion": "4.3",
+      "orden": 403,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/ciencia-ficcion/cyberpunk.md"
+    },
+    {
+      "id": "alien",
+      "titulo": "Alien RPG",
+      "titulo_original": "Alien RPG",
+      "genero": "ciencia-ficcion",
+      "genero_label": "Ciencia ficción",
+      "tipo": "ficha",
+      "tipo_ui": "sistema",
+      "tipo_label": "Sistema",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "year-zero",
+      "familia_label": "Year Zero",
+      "motor": "Year Zero d6",
+      "dados": [
+        "d6"
+      ],
+      "recursos": [
+        "reglas",
+        "dados",
+        "cartas",
+        "campaña",
+        "cinemático"
+      ],
+      "alias": [
+        "Alien RPG",
+        "xenomorfo",
+        "horror espacial"
+      ],
+      "icono": "👽",
+      "color": "#22c55e",
+      "tags": [
+        "ciencia-ficcion",
+        "horror-espacial",
+        "cinematic",
+        "cartas"
+      ],
+      "resumen": "El RPG oficial de Alien: modo cinematic de 1-3 sesiones, campaña persistente, dados de estrés y xenomorfos que acechan.",
+      "fuente": "BIBLIOTECA_TTRPG.md §4.4",
+      "seccion": "4.4",
+      "orden": 404,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/ciencia-ficcion/alien.md"
+    },
+    {
+      "id": "star-wars",
+      "titulo": "Star Wars RPG",
+      "titulo_original": "Star Wars RPG",
+      "genero": "ciencia-ficcion",
+      "genero_label": "Ciencia ficción",
+      "tipo": "ficha",
+      "tipo_ui": "sistema",
+      "tipo_label": "Sistema",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "narrativo",
+      "familia_label": "Narrativo",
+      "motor": "Dados narrativos (Genesys)",
+      "dados": [
+        "d8",
+        "d12"
+      ],
+      "recursos": [
+        "reglas",
+        "dados",
+        "campaña",
+        "space-opera"
+      ],
+      "alias": [
+        "Star Wars",
+        "Edge of the Empire",
+        "Age of Rebellion",
+        "Force and Destiny"
+      ],
+      "icono": "🌌",
+      "color": "#eab308",
+      "tags": [
+        "ciencia-ficcion",
+        "space-opera",
+        "dados-narrativos"
+      ],
+      "resumen": "Tres líneas compatibles (Edge of the Empire, Age of Rebellion y Force and Destiny) que cubren contrabando, Rebelión y Jedi.",
+      "fuente": "BIBLIOTECA_TTRPG.md §4.5",
+      "seccion": "4.5",
+      "orden": 405,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/ciencia-ficcion/star-wars.md"
+    },
+    {
+      "id": "mothership",
+      "titulo": "Mothership",
+      "titulo_original": "Mothership",
+      "genero": "ciencia-ficcion",
+      "genero_label": "Ciencia ficción",
+      "tipo": "ficha",
+      "tipo_ui": "sistema",
+      "tipo_label": "Sistema",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "d100",
+      "familia_label": "d100 / BRP",
+      "motor": "d100 / OSR",
+      "dados": [
+        "d100"
+      ],
+      "recursos": [
+        "reglas",
+        "dados",
+        "osr",
+        "horror espacial"
+      ],
+      "alias": [
+        "Mothership",
+        "horror espacial",
+        "contratistas"
+      ],
+      "icono": "🛸",
+      "color": "#a855f7",
+      "tags": [
+        "ciencia-ficcion",
+        "horror-espacial",
+        "osr",
+        "d100"
+      ],
+      "resumen": "Horror espacial letal, OSR y modular. Los PJ son contratistas de una corporación, atrapados en una nave o estación con algo que los caza. Muy influido por Alien, Dead Space y el sci-fi…",
+      "fuente": "BIBLIOTECA_TTRPG.md §4.6",
+      "seccion": "4.6",
+      "orden": 406,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/ciencia-ficcion/mothership.md"
+    },
+    {
+      "id": "stars-without-number",
+      "titulo": "Stars Without Number",
+      "titulo_original": "Stars Without Number",
+      "genero": "ciencia-ficcion",
+      "genero_label": "Ciencia ficción",
+      "tipo": "ficha",
+      "tipo_ui": "sistema",
+      "tipo_label": "Sistema",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "osr",
+      "familia_label": "OSR",
+      "motor": "OSR d20 / 2d6",
+      "dados": [
+        "d20",
+        "2d6"
+      ],
+      "recursos": [
+        "reglas",
+        "sandbox",
+        "facciones",
+        "sector"
+      ],
+      "alias": [
+        "Stars Without Number",
+        "SWN",
+        "sandbox espacial"
+      ],
+      "icono": "🌠",
+      "color": "#0ea5e9",
+      "tags": [
+        "ciencia-ficcion",
+        "sandbox",
+        "osr",
+        "facciones"
+      ],
+      "resumen": "Sandbox espacial con herramientas de creación de sectores, facciones, planetas, alienígenas y aventuras. La edición gratuita incluye todo lo necesario para jugar; la de pago añade opciones.",
+      "fuente": "BIBLIOTECA_TTRPG.md §4.7",
+      "seccion": "4.7",
+      "orden": 407,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/ciencia-ficcion/stars-without-number.md"
+    },
+    {
+      "id": "traveller",
+      "titulo": "Traveller",
+      "titulo_original": "Traveller",
+      "genero": "ciencia-ficcion",
+      "genero_label": "Ciencia ficción",
+      "tipo": "ficha",
+      "tipo_ui": "sistema",
+      "tipo_label": "Sistema",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "2d6",
+      "familia_label": "2d6",
+      "motor": "2d6",
+      "dados": [
+        "2d6"
+      ],
+      "recursos": [
+        "reglas",
+        "comercio",
+        "nave",
+        "space-opera"
+      ],
+      "alias": [
+        "Traveller",
+        "lifepath",
+        "comercio espacial"
+      ],
+      "icono": "🧭",
+      "color": "#14b8a6",
+      "tags": [
+        "ciencia-ficcion",
+        "space-opera",
+        "2d6",
+        "comercio"
+      ],
+      "resumen": "La space opera clásica (1977). Creación de personajes por carrera/lifepath (puedes morir o retirarte durante la generación), nave con hipoteca, comercio, exploración y burocracia imperial.",
+      "fuente": "BIBLIOTECA_TTRPG.md §4.8",
+      "seccion": "4.8",
+      "orden": 408,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/ciencia-ficcion/traveller.md"
+    },
+    {
+      "id": "lancer",
+      "titulo": "Lancer",
+      "titulo_original": "Lancer",
+      "genero": "ciencia-ficcion",
+      "genero_label": "Ciencia ficción",
+      "tipo": "ficha",
+      "tipo_ui": "sistema",
+      "tipo_label": "Sistema",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "d20",
+      "familia_label": "d20",
+      "motor": "d20 táctico",
+      "dados": [
+        "d20"
+      ],
+      "recursos": [
+        "reglas",
+        "mechs",
+        "cuadrícula",
+        "gratis"
+      ],
+      "alias": [
+        "Lancer",
+        "mechs",
+        "combate táctico"
+      ],
+      "icono": "🤖",
+      "color": "#6366f1",
+      "tags": [
+        "ciencia-ficcion",
+        "mechs",
+        "táctico",
+        "gratis"
+      ],
+      "resumen": "Mechs modulares, combate táctico por cuadrícula y una ambientación de ciencia ficción post-humana. Fuera del mech, el juego es narrativo y ligero; dentro, es un wargame táctico.",
+      "fuente": "BIBLIOTECA_TTRPG.md §4.9",
+      "seccion": "4.9",
+      "orden": 409,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/ciencia-ficcion/lancer.md"
+    },
+    {
+      "id": "blade-runner",
+      "titulo": "Blade Runner RPG",
+      "titulo_original": "Blade Runner RPG",
+      "genero": "ciencia-ficcion",
+      "genero_label": "Ciencia ficción",
+      "tipo": "ficha",
+      "tipo_ui": "sistema",
+      "tipo_label": "Sistema",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "year-zero",
+      "familia_label": "Year Zero",
+      "motor": "Year Zero d6",
+      "dados": [
+        "d6"
+      ],
+      "recursos": [
+        "reglas",
+        "investigación",
+        "neo-noir",
+        "caso"
+      ],
+      "alias": [
+        "Blade Runner",
+        "replicantes",
+        "neo-noir"
+      ],
+      "icono": "🌃",
+      "color": "#f97316",
+      "tags": [
+        "ciencia-ficcion",
+        "neo-noir",
+        "year-zero",
+        "investigación"
+      ],
+      "resumen": "Neo-noir en Los Ángeles de 2037. Los PJ son Blade Runners que investigan replicantes. El juego usa un caso como estructura: pistas, sospechosos, decisiones morales y un reloj de tiempo.",
+      "fuente": "BIBLIOTECA_TTRPG.md §4.10",
+      "seccion": "4.10",
+      "orden": 410,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/ciencia-ficcion/blade-runner.md"
+    },
+    {
+      "id": "star-trek",
+      "titulo": "Star Trek Adventures",
+      "titulo_original": "Star Trek Adventures",
+      "genero": "ciencia-ficcion",
+      "genero_label": "Ciencia ficción",
+      "tipo": "ficha",
+      "tipo_ui": "sistema",
+      "tipo_label": "Sistema",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "2d20",
+      "familia_label": "2d20",
+      "motor": "2d20",
+      "dados": [
+        "d20"
+      ],
+      "recursos": [
+        "reglas",
+        "diplomacia",
+        "tripulación",
+        "momentum"
+      ],
+      "alias": [
+        "Star Trek Adventures",
+        "2d20",
+        "tripulación estelar"
+      ],
+      "icono": "🖖",
+      "color": "#3b82f6",
+      "tags": [
+        "ciencia-ficcion",
+        "tripulación",
+        "2d20",
+        "diplomacia"
+      ],
+      "resumen": "Juego de tripulación estelar: ciencia, diplomacia, exploración y combate. El sistema 2d20 genera momentum y threat, dos divisas narrativas ideales para el DM IA.",
+      "fuente": "BIBLIOTECA_TTRPG.md §4.11",
+      "seccion": "4.11",
+      "orden": 411,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/ciencia-ficcion/star-trek.md"
+    },
+    {
+      "id": "warhammer-40k",
+      "titulo": "Warhammer 40.000",
+      "titulo_original": "Warhammer 40.000",
+      "genero": "ciencia-ficcion",
+      "genero_label": "Ciencia ficción",
+      "tipo": "coleccion",
+      "tipo_ui": "coleccion",
+      "tipo_label": "Colección",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "varios",
+      "familia_label": "Varios motores",
+      "motor": "Varios (d6, d100, d20)",
+      "dados": [
+        "d6",
+        "d100",
+        "d20"
+      ],
+      "recursos": [
+        "miniaturas",
+        "grimdark",
+        "campaña",
+        "wargame"
+      ],
+      "alias": [
+        "Warhammer 40.000",
+        "40k",
+        "Wrath & Glory",
+        "Dark Heresy",
+        "Necromunda",
+        "Kill Team"
+      ],
+      "icono": "⚔️",
+      "color": "#dc2626",
+      "tags": [
+        "ciencia-ficcion",
+        "grimdark",
+        "minis",
+        "40k",
+        "coleccion"
+      ],
+      "resumen": "Wrath & Glory, Imperium Maledictum, Dark Heresy, Necromunda y Kill Team: grimdark, facciones, horror imperial y minis.",
+      "fuente": "BIBLIOTECA_TTRPG.md §4.12",
+      "seccion": "4.12",
+      "orden": 412,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/ciencia-ficcion/warhammer-40k.md"
+    },
+    {
+      "id": "dune",
+      "titulo": "Dune",
+      "titulo_original": "Dune",
+      "genero": "ciencia-ficcion",
+      "genero_label": "Ciencia ficción",
+      "tipo": "ficha",
+      "tipo_ui": "sistema",
+      "tipo_label": "Sistema",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "2d20",
+      "familia_label": "2d20",
+      "motor": "2d20",
+      "dados": [
+        "d20"
+      ],
+      "recursos": [
+        "reglas",
+        "intriga",
+        "política",
+        "especia"
+      ],
+      "alias": [
+        "Dune",
+        "2d20",
+        "casas nobles"
+      ],
+      "icono": "🏜️",
+      "color": "#d97706",
+      "tags": [
+        "ciencia-ficcion",
+        "intriga",
+        "2d20",
+        "política"
+      ],
+      "resumen": "Intriga política, casas nobles y especia en el Imperio de Dune; el juego premia la planificación y el duelo de intereses.",
+      "fuente": "BIBLIOTECA_TTRPG.md §4.13",
+      "seccion": "4.13",
+      "orden": 413,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/ciencia-ficcion/dune.md"
+    },
+    {
+      "id": "the-expanse",
+      "titulo": "The Expanse",
+      "titulo_original": "The Expanse",
+      "genero": "ciencia-ficcion",
+      "genero_label": "Ciencia ficción",
+      "tipo": "ficha",
+      "tipo_ui": "sistema",
+      "tipo_label": "Sistema",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "age",
+      "familia_label": "AGE",
+      "motor": "AGE 3d6",
+      "dados": [
+        "3d6"
+      ],
+      "recursos": [
+        "reglas",
+        "space-opera",
+        "tripulación",
+        "política"
+      ],
+      "alias": [
+        "The Expanse",
+        "AGE",
+        "hard sci-fi"
+      ],
+      "icono": "🪐",
+      "color": "#64748b",
+      "tags": [
+        "ciencia-ficcion",
+        "hard-sci-fi",
+        "age",
+        "tripulación"
+      ],
+      "resumen": "Hard sci-fi de tripulación, política planetaria y tensiones del sistema solar; motor AGE con dados de drama.",
+      "fuente": "BIBLIOTECA_TTRPG.md §4.14",
+      "seccion": "4.14",
+      "orden": 414,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/ciencia-ficcion/the-expanse.md"
+    },
+    {
+      "id": "cyberpunk-osr",
+      "titulo": "Cyberpunk OSR y derivados",
+      "titulo_original": "Cyberpunk OSR y afines",
+      "genero": "ciencia-ficcion",
+      "genero_label": "Ciencia ficción",
+      "tipo": "coleccion",
+      "tipo_ui": "coleccion",
+      "tipo_label": "Colección",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "varios",
+      "familia_label": "Varios motores",
+      "motor": "Varios (d20, 2d6, d6 pool)",
+      "dados": [
+        "d20",
+        "2d6",
+        "d6"
+      ],
+      "recursos": [
+        "cyberpunk",
+        "osr",
+        "miniaturas",
+        "campaña"
+      ],
+      "alias": [
+        "Cyberpunk OSR",
+        "CY_BORG",
+        "Zaibatsu",
+        "The Sprawl",
+        "Carbon 2185"
+      ],
+      "icono": "💾",
+      "color": "#ec4899",
+      "tags": [
+        "ciencia-ficcion",
+        "cyberpunk",
+        "osr",
+        "colección",
+        "coleccion"
+      ],
+      "resumen": "Receta cyberpunk OSR: CY_BORG para el tono, Cyberpunk RED para el equipo y Stargrave para el combate con minis.",
+      "fuente": "BIBLIOTECA_TTRPG.md §4.15",
+      "seccion": "4.15",
+      "orden": 415,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/ciencia-ficcion/cyberpunk-osr.md"
+    },
+    {
+      "id": "wargames-sci-fi",
+      "titulo": "Wargames de ciencia ficción",
+      "titulo_original": "Wargames sci-fi",
+      "genero": "ciencia-ficcion",
+      "genero_label": "Ciencia ficción",
+      "tipo": "coleccion",
+      "tipo_ui": "coleccion",
+      "tipo_label": "Colección",
+      "categoria": "wargame",
+      "categoria_label": "Wargame",
+      "familia": "varios",
+      "familia_label": "Varios motores",
+      "motor": "Varios (d6 pool, d20, 2d6)",
+      "dados": [
+        "d6",
+        "d20",
+        "2d6"
+      ],
+      "recursos": [
+        "miniaturas",
+        "escaramuza",
+        "campaña",
+        "tablero"
+      ],
+      "alias": [
+        "Wargames sci-fi",
+        "Necromunda",
+        "Kill Team",
+        "Infinity",
+        "Battletech",
+        "Gaslands"
+      ],
+      "icono": "🎯",
+      "color": "#ef4444",
+      "tags": [
+        "ciencia-ficcion",
+        "minis",
+        "wargame",
+        "escaramuza",
+        "coleccion"
+      ],
+      "resumen": "Colección de wargames de escaramuza sci-fi para usar minis: Necromunda, Kill Team, Infinity, Battletech y más.",
+      "fuente": "BIBLIOTECA_TTRPG.md §4.16",
+      "seccion": "4.16",
+      "orden": 416,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/ciencia-ficcion/wargames-sci-fi.md"
+    },
+    {
+      "id": "campanas-sci-fi",
+      "titulo": "Campañas de ciencia ficción",
+      "titulo_original": "Campañas de ciencia ficción",
+      "genero": "ciencia-ficcion",
+      "genero_label": "Ciencia ficción",
+      "tipo": "indice",
+      "tipo_ui": "indice",
+      "tipo_label": "Índice",
+      "categoria": "guia",
+      "categoria_label": "Guía",
+      "familia": "varios",
+      "familia_label": "Varios motores",
+      "motor": "Varios",
+      "dados": [],
+      "recursos": [
+        "campañas",
+        "starters",
+        "guía"
+      ],
+      "alias": [
+        "Campañas de ciencia ficción",
+        "starters sci-fi"
+      ],
+      "icono": "🗺️",
+      "color": "#0ea5e9",
+      "tags": [
+        "ciencia-ficcion",
+        "campañas",
+        "índice"
+      ],
+      "resumen": "Índice de campañas y starters de ciencia ficción: duración, tono y notas para preparar la siguiente partida.",
+      "fuente": "BIBLIOTECA_TTRPG.md §4.17",
+      "seccion": "4.17",
+      "orden": 417,
+      "actualizado": "2026-10-22",
+      "ruta": "indices/campanas-sci-fi.md"
+    },
+    {
+      "id": "lovecraft",
+      "titulo": "Lovecraft y el Mythos",
+      "titulo_original": "El universo Lovecraft",
+      "genero": "horror",
+      "genero_label": "Horror",
+      "tipo": "ficha",
+      "tipo_ui": "documento",
+      "tipo_label": "Documento",
+      "categoria": "literatura",
+      "categoria_label": "Literatura",
+      "familia": "literatura",
+      "familia_label": "Literatura",
+      "motor": "Literatura",
+      "dados": [],
+      "recursos": [
+        "mythos",
+        "literatura",
+        "dominio público",
+        "ambientación"
+      ],
+      "alias": [
+        "Lovecraft",
+        "Mythos",
+        "Cthulhu",
+        "horror cósmico"
+      ],
+      "icono": "🐙",
+      "color": "#14b8a6",
+      "tags": [
+        "horror",
+        "mythos",
+        "literatura",
+        "dominio-público"
+      ],
+      "resumen": "Lovecraft no inventó el horror cósmico, pero sí le dio su gramática: lo desconocido no es malvado, es indiferente; el conocimiento destruye; la humanidad es una mota de polvo; los…",
+      "fuente": "BIBLIOTECA_TTRPG.md §5.1",
+      "seccion": "5.1",
+      "orden": 501,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/horror/lovecraft.md"
+    },
+    {
+      "id": "call-of-cthulhu",
+      "titulo": "La Llamada de Cthulhu 7e",
+      "titulo_original": "La Llamada de Cthulhu 7e",
+      "genero": "horror",
+      "genero_label": "Horror",
+      "tipo": "ficha",
+      "tipo_ui": "sistema",
+      "tipo_label": "Sistema",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "d100",
+      "familia_label": "d100 / BRP",
+      "motor": "d100 / BRP",
+      "dados": [
+        "d100"
+      ],
+      "recursos": [
+        "reglas",
+        "investigación",
+        "horror",
+        "campaña"
+      ],
+      "alias": [
+        "La Llamada de Cthulhu",
+        "Call of Cthulhu",
+        "CoC",
+        "BRP"
+      ],
+      "icono": "📖",
+      "color": "#10b981",
+      "tags": [
+        "horror",
+        "investigación",
+        "d100",
+        "campaña"
+      ],
+      "resumen": "El RPG de horror cósmico por antonomasia. Los PJ son investigadores (no héroes de acción) que descubren un mundo oculto y pagan un precio mental y físico. La campaña puede ser un…",
+      "fuente": "BIBLIOTECA_TTRPG.md §5.2",
+      "seccion": "5.2",
+      "orden": 502,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/horror/call-of-cthulhu.md"
+    },
+    {
+      "id": "innsmouth",
+      "titulo": "La sombra sobre Innsmouth",
+      "titulo_original": "La sombra sobre Innsmouth",
+      "genero": "horror",
+      "genero_label": "Horror",
+      "tipo": "ficha",
+      "tipo_ui": "documento",
+      "tipo_label": "Documento",
+      "categoria": "literatura",
+      "categoria_label": "Literatura",
+      "familia": "literatura",
+      "familia_label": "Literatura",
+      "motor": "Literatura",
+      "dados": [],
+      "recursos": [
+        "novela",
+        "mythos",
+        "adaptación"
+      ],
+      "alias": [
+        "La sombra sobre Innsmouth",
+        "Innsmouth",
+        "Deep Ones"
+      ],
+      "icono": "🌊",
+      "color": "#0ea5e9",
+      "tags": [
+        "horror",
+        "novella",
+        "deep-ones",
+        "adaptación"
+      ],
+      "resumen": "Un joven viaja a Innsmouth, un pueblo costero decadente de Massachusetts, en busca de datos sobre su familia. Descubre una comunidad cerrada, una iglesia extraña (la Orden Esotérica de…",
+      "fuente": "BIBLIOTECA_TTRPG.md §5.3",
+      "seccion": "5.3",
+      "orden": 503,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/horror/innsmouth.md"
+    },
+    {
+      "id": "arkham-horror-rpg",
+      "titulo": "Arkham Horror RPG",
+      "titulo_original": "Arkham Horror RPG",
+      "genero": "horror",
+      "genero_label": "Horror",
+      "tipo": "ficha",
+      "tipo_ui": "sistema",
+      "tipo_label": "Sistema",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "d6-pool",
+      "familia_label": "d6 pool",
+      "motor": "d6 pool",
+      "dados": [
+        "d6"
+      ],
+      "recursos": [
+        "reglas",
+        "pulp",
+        "Arkham",
+        "investigación"
+      ],
+      "alias": [
+        "Arkham Horror RPG",
+        "Arkham",
+        "pulp"
+      ],
+      "icono": "🕯️",
+      "color": "#8b5cf6",
+      "tags": [
+        "horror",
+        "pulp",
+        "d6-pool",
+        "arkham"
+      ],
+      "resumen": "La versión pulp y de acción del universo Arkham. Los PJ son investigadores con talentos, recursos y relaciones, enfrentados a cultos, monstruos y conspiraciones en el Arkham de los años…",
+      "fuente": "BIBLIOTECA_TTRPG.md §5.4",
+      "seccion": "5.4",
+      "orden": 504,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/horror/arkham-horror-rpg.md"
+    },
+    {
+      "id": "arkham-horror-juegos",
+      "titulo": "Arkham Horror (juegos de mesa)",
+      "titulo_original": "Arkham Horror y juegos de mesa",
+      "genero": "horror",
+      "genero_label": "Horror",
+      "tipo": "coleccion",
+      "tipo_ui": "coleccion",
+      "tipo_label": "Colección",
+      "categoria": "juego-de-mesa",
+      "categoria_label": "Juego de mesa",
+      "familia": "mesa",
+      "familia_label": "Juego de mesa",
+      "motor": "Juegos de mesa",
+      "dados": [
+        "d6",
+        "d8"
+      ],
+      "recursos": [
+        "tableros",
+        "miniaturas",
+        "cartas",
+        "cooperativo"
+      ],
+      "alias": [
+        "Arkham Horror",
+        "Mansions of Madness",
+        "Eldritch Horror",
+        "Elder Sign"
+      ],
+      "icono": "🎲",
+      "color": "#7c3aed",
+      "tags": [
+        "horror",
+        "juegos-de-mesa",
+        "minis",
+        "cartas",
+        "coleccion"
+      ],
+      "resumen": "Arkham Horror, Mansions of Madness y otros juegos de mesa del Mythos: tableros, cartas, minis e investigación.",
+      "fuente": "BIBLIOTECA_TTRPG.md §5.5",
+      "seccion": "5.5",
+      "orden": 505,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/horror/arkham-horror-juegos.md"
+    },
+    {
+      "id": "delta-green",
+      "titulo": "Delta Green",
+      "titulo_original": "Delta Green",
+      "genero": "horror",
+      "genero_label": "Horror",
+      "tipo": "ficha",
+      "tipo_ui": "sistema",
+      "tipo_label": "Sistema",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "d100",
+      "familia_label": "d100 / BRP",
+      "motor": "d100 / BRP",
+      "dados": [
+        "d100"
+      ],
+      "recursos": [
+        "reglas",
+        "conspiración",
+        "moderno",
+        "investigación"
+      ],
+      "alias": [
+        "Delta Green",
+        "BRP",
+        "conspiración"
+      ],
+      "icono": "🕵️",
+      "color": "#22c55e",
+      "tags": [
+        "horror",
+        "conspiración",
+        "moderno",
+        "d100"
+      ],
+      "resumen": "Una organización clandestina dentro del Gobierno de EE. UU. que combate amenazas del Mythos. Los PJ son agentes con vidas civiles (Bonds) que se deterioran mientras el trabajo les…",
+      "fuente": "BIBLIOTECA_TTRPG.md §5.6",
+      "seccion": "5.6",
+      "orden": 506,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/horror/delta-green.md"
+    },
+    {
+      "id": "vaesen",
+      "titulo": "Vaesen",
+      "titulo_original": "Vaesen",
+      "genero": "horror",
+      "genero_label": "Horror",
+      "tipo": "ficha",
+      "tipo_ui": "sistema",
+      "tipo_label": "Sistema",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "year-zero",
+      "familia_label": "Year Zero",
+      "motor": "Year Zero d6",
+      "dados": [
+        "d6"
+      ],
+      "recursos": [
+        "reglas",
+        "folclore",
+        "investigación",
+        "base"
+      ],
+      "alias": [
+        "Vaesen",
+        "folclore nórdico",
+        "Year Zero"
+      ],
+      "icono": "🌲",
+      "color": "#84cc16",
+      "tags": [
+        "horror",
+        "folclore",
+        "year-zero",
+        "nórdico"
+      ],
+      "resumen": "Horror folclórico en la Escandinavia del siglo XIX. Los PJ son investigadores con el don de ver a los vaesen (criaturas del folclore) y una base compartida (una mansión). Cada caso es un…",
+      "fuente": "BIBLIOTECA_TTRPG.md §5.7",
+      "seccion": "5.7",
+      "orden": 507,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/horror/vaesen.md"
+    },
+    {
+      "id": "candela-obscura",
+      "titulo": "Candela Obscura",
+      "titulo_original": "Candela Obscura",
+      "genero": "horror",
+      "genero_label": "Horror",
+      "tipo": "ficha",
+      "tipo_ui": "sistema",
+      "tipo_label": "Sistema",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "d6-pool",
+      "familia_label": "d6 pool",
+      "motor": "d6 pool",
+      "dados": [
+        "d6"
+      ],
+      "recursos": [
+        "reglas",
+        "victoriano",
+        "actual-play",
+        "investigación"
+      ],
+      "alias": [
+        "Candela Obscura",
+        "Newfaire",
+        "Critical Role"
+      ],
+      "icono": "🔥",
+      "color": "#f59e0b",
+      "tags": [
+        "horror",
+        "victoriano",
+        "d6-pool",
+        "actual-play"
+      ],
+      "resumen": "Horror victoriano/eduardiano en la ciudad ficticia de Newfaire. Los PJ pertenecen a una círculo de Candela Obscura que investiga fenómenos sobrenaturales. Tono de actual play, drama de…",
+      "fuente": "BIBLIOTECA_TTRPG.md §5.8",
+      "seccion": "5.8",
+      "orden": 508,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/horror/candela-obscura.md"
+    },
+    {
+      "id": "kult",
+      "titulo": "Kult: Divinity Lost",
+      "titulo_original": "Kult: Divinity Lost",
+      "genero": "horror",
+      "genero_label": "Horror",
+      "tipo": "ficha",
+      "tipo_ui": "sistema",
+      "tipo_label": "Sistema",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "pbta",
+      "familia_label": "PbtA",
+      "motor": "PbtA 2d10",
+      "dados": [
+        "2d10"
+      ],
+      "recursos": [
+        "reglas",
+        "horror",
+        "adultos",
+        "gnóstico"
+      ],
+      "alias": [
+        "Kult",
+        "Divinity Lost",
+        "PbtA",
+        "horror gnóstico"
+      ],
+      "icono": "🕳️",
+      "color": "#a855f7",
+      "tags": [
+        "horror",
+        "gnóstico",
+        "pbta",
+        "adultos"
+      ],
+      "resumen": "Horror gnóstico y adulto: la realidad es una prisión creada por entidades superiores; los PJ despiertan y ven las grietas. Temas maduros (violencia, abuso, sexualidad) con herramientas…",
+      "fuente": "BIBLIOTECA_TTRPG.md §5.9",
+      "seccion": "5.9",
+      "orden": 509,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/horror/kult.md"
+    },
+    {
+      "id": "horror-one-shots",
+      "titulo": "One-shots de horror",
+      "titulo_original": "One-shots de horror",
+      "genero": "horror",
+      "genero_label": "Horror",
+      "tipo": "coleccion",
+      "tipo_ui": "coleccion",
+      "tipo_label": "Colección",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "varios",
+      "familia_label": "Varios motores",
+      "motor": "Varios",
+      "dados": [
+        "d6",
+        "d10"
+      ],
+      "recursos": [
+        "one-shot",
+        "pacing",
+        "horror",
+        "experimental"
+      ],
+      "alias": [
+        "One-shots de horror",
+        "Ten Candles",
+        "Dread",
+        "Trophy Dark"
+      ],
+      "icono": "🕯️",
+      "color": "#64748b",
+      "tags": [
+        "horror",
+        "one-shot",
+        "pacing",
+        "colección",
+        "coleccion"
+      ],
+      "resumen": "Ten Candles, Dread, Trophy Dark y otros one-shots: laboratorios de pacing para cerrar una historia en una sesión.",
+      "fuente": "BIBLIOTECA_TTRPG.md §5.10",
+      "seccion": "5.10",
+      "orden": 510,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/horror/horror-one-shots.md"
+    },
+    {
+      "id": "vampiro",
+      "titulo": "Vampiro: La Mascarada 5e",
+      "titulo_original": "Vampiro: La Mascarada 5e",
+      "genero": "horror",
+      "genero_label": "Horror",
+      "tipo": "ficha",
+      "tipo_ui": "sistema",
+      "tipo_label": "Sistema",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "d10-pool",
+      "familia_label": "d10 pool",
+      "motor": "d10 pool (Storyteller)",
+      "dados": [
+        "d10"
+      ],
+      "recursos": [
+        "reglas",
+        "World of Darkness",
+        "política",
+        "horror gótico"
+      ],
+      "alias": [
+        "Vampiro",
+        "Vampire: The Masquerade",
+        "V5",
+        "World of Darkness"
+      ],
+      "icono": "🧛",
+      "color": "#dc2626",
+      "tags": [
+        "horror",
+        "world-of-darkness",
+        "d10",
+        "política"
+      ],
+      "resumen": "Horror gótico y político: los PJ son vampiros, luchan contra la Bestia, la sed y las facciones de la Camarilla/Sabbat/Anarquistas. La crónica puede ser íntima o global.",
+      "fuente": "BIBLIOTECA_TTRPG.md §5.11",
+      "seccion": "5.11",
+      "orden": 511,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/horror/vampiro.md"
+    },
+    {
+      "id": "grimdark",
+      "titulo": "Grimdark y horror fantástico",
+      "titulo_original": "Grimdark y horror fantástico",
+      "genero": "horror",
+      "genero_label": "Horror",
+      "tipo": "coleccion",
+      "tipo_ui": "coleccion",
+      "tipo_label": "Colección",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "varios",
+      "familia_label": "Varios motores",
+      "motor": "Varios",
+      "dados": [
+        "d20",
+        "d6",
+        "d100"
+      ],
+      "recursos": [
+        "grimdark",
+        "fantasía oscura",
+        "horror"
+      ],
+      "alias": [
+        "Grimdark",
+        "Warhammer Fantasy",
+        "Mörk Borg",
+        "Shadow of the Demon Lord",
+        "Symbaroum"
+      ],
+      "icono": "💀",
+      "color": "#71717a",
+      "tags": [
+        "horror",
+        "grimdark",
+        "fantasía-oscura",
+        "colección",
+        "coleccion"
+      ],
+      "resumen": "Warhammer Fantasy, Mörk Borg, Shadow of the Demon Lord, Symbaroum y Forbidden Lands: grimdark y horror fantástico para superponer a D&D o CoC.",
+      "fuente": "BIBLIOTECA_TTRPG.md §5.12",
+      "seccion": "5.12",
+      "orden": 512,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/horror/grimdark.md"
+    },
+    {
+      "id": "otras-investigaciones",
+      "titulo": "Investigación alternativa (GUMSHOE y PbtA)",
+      "titulo_original": "Otras filosofías de investigación",
+      "genero": "horror",
+      "genero_label": "Horror",
+      "tipo": "coleccion",
+      "tipo_ui": "coleccion",
+      "tipo_label": "Colección",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "varios",
+      "familia_label": "Varios motores",
+      "motor": "Varios (GUMSHOE, PbtA)",
+      "dados": [
+        "d6",
+        "d10"
+      ],
+      "recursos": [
+        "investigación",
+        "GUMSHOE",
+        "PbtA",
+        "misterio"
+      ],
+      "alias": [
+        "Investigación alternativa",
+        "Trail of Cthulhu",
+        "Brindlewood Bay",
+        "Cthulhu Dark"
+      ],
+      "icono": "🔍",
+      "color": "#0ea5e9",
+      "tags": [
+        "horror",
+        "investigación",
+        "gumshoe",
+        "pbta",
+        "coleccion"
+      ],
+      "resumen": "Trail of Cthulhu, Cthulhu Dark, Fate of Cthulhu, The Between, Brindlewood Bay y más formas de investigar el horror.",
+      "fuente": "BIBLIOTECA_TTRPG.md §5.13",
+      "seccion": "5.13",
+      "orden": 513,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/horror/otras-investigaciones.md"
+    },
+    {
+      "id": "campanas-horror",
+      "titulo": "Campañas de horror",
+      "titulo_original": "Campañas de horror",
+      "genero": "horror",
+      "genero_label": "Horror",
+      "tipo": "indice",
+      "tipo_ui": "indice",
+      "tipo_label": "Índice",
+      "categoria": "guia",
+      "categoria_label": "Guía",
+      "familia": "varios",
+      "familia_label": "Varios motores",
+      "motor": "Varios",
+      "dados": [],
+      "recursos": [
+        "campañas",
+        "starters",
+        "guía"
+      ],
+      "alias": [
+        "Campañas de horror",
+        "starters horror"
+      ],
+      "icono": "🗺️",
+      "color": "#8b5cf6",
+      "tags": [
+        "horror",
+        "campañas",
+        "índice"
+      ],
+      "resumen": "Índice de campañas y starters de horror: duración, tono y notas para preparar la siguiente partida.",
+      "fuente": "BIBLIOTECA_TTRPG.md §5.14",
+      "seccion": "5.14",
+      "orden": 514,
+      "actualizado": "2026-10-22",
+      "ruta": "indices/campanas-horror.md"
+    },
+    {
+      "id": "dnd-5e",
+      "titulo": "D&D 5e / 2024",
+      "titulo_original": "D&D 5e / 2024",
+      "genero": "fantasia",
+      "genero_label": "Fantasía",
+      "tipo": "ficha",
+      "tipo_ui": "sistema",
+      "tipo_label": "Sistema",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "d20",
+      "familia_label": "d20",
+      "motor": "d20",
+      "dados": [
+        "d20",
+        "d4",
+        "d6",
+        "d8",
+        "d10",
+        "d12",
+        "d100"
+      ],
+      "recursos": [
+        "reglas",
+        "dados",
+        "miniaturas",
+        "cartas",
+        "campañas",
+        "SRD"
+      ],
+      "alias": [
+        "D&D",
+        "Dungeons & Dragons",
+        "5e",
+        "2024",
+        "SRD 5.2"
+      ],
+      "icono": "🐉",
+      "color": "#dc2626",
+      "tags": [
+        "fantasia",
+        "d20",
+        "fantasía-heroica",
+        "oficial"
+      ],
+      "resumen": "El juego de rol más popular del mundo. Fantasía heroica, clases, niveles, dados poliédricos, dungeon, dragones y campañas épicas. La revisión de 2024 actualiza clases, trasfondos, reglas…",
+      "fuente": "BIBLIOTECA_TTRPG.md §6.1",
+      "seccion": "6.1",
+      "orden": 601,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/fantasia/dnd-5e.md"
+    },
+    {
+      "id": "pathfinder-2e",
+      "titulo": "Pathfinder 2e",
+      "titulo_original": "Pathfinder 2e",
+      "genero": "fantasia",
+      "genero_label": "Fantasía",
+      "tipo": "ficha",
+      "tipo_ui": "sistema",
+      "tipo_label": "Sistema",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "d20",
+      "familia_label": "d20",
+      "motor": "d20",
+      "dados": [
+        "d20"
+      ],
+      "recursos": [
+        "reglas",
+        "táctico",
+        "remaster",
+        "builds"
+      ],
+      "alias": [
+        "Pathfinder",
+        "PF2",
+        "Pathfinder 2e",
+        "Remaster"
+      ],
+      "icono": "🛡️",
+      "color": "#2563eb",
+      "tags": [
+        "fantasia",
+        "d20",
+        "táctico",
+        "remaster"
+      ],
+      "resumen": "Fantasía táctica con tres acciones por turno, grados de éxito, builds profundas y un sistema de competencia por nivel. El Remaster reorganiza los libros y elimina dependencias de la OGL.",
+      "fuente": "BIBLIOTECA_TTRPG.md §6.2",
+      "seccion": "6.2",
+      "orden": 602,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/fantasia/pathfinder-2e.md"
+    },
+    {
+      "id": "vieja-escuela",
+      "titulo": "Vieja Escuela",
+      "titulo_original": "Vieja Escuela",
+      "genero": "fantasia",
+      "genero_label": "Fantasía",
+      "tipo": "ficha",
+      "tipo_ui": "sistema",
+      "tipo_label": "Sistema",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "osr",
+      "familia_label": "OSR",
+      "motor": "OSR d20",
+      "dados": [
+        "d20"
+      ],
+      "recursos": [
+        "reglas",
+        "osr",
+        "gratis",
+        "español"
+      ],
+      "alias": [
+        "Vieja Escuela",
+        "OSR español",
+        "retroclon"
+      ],
+      "icono": "⚔️",
+      "color": "#f59e0b",
+      "tags": [
+        "fantasia",
+        "osr",
+        "gratis",
+        "español"
+      ],
+      "resumen": "El OSR español por excelencia: reglas ligeras, clases icónicas, dungeons, hexcrawls y tono de juego de los 80.",
+      "fuente": "BIBLIOTECA_TTRPG.md §6.3",
+      "seccion": "6.3",
+      "orden": 603,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/fantasia/vieja-escuela.md"
+    },
+    {
+      "id": "shadowdark",
+      "titulo": "Shadowdark",
+      "titulo_original": "Shadowdark",
+      "genero": "fantasia",
+      "genero_label": "Fantasía",
+      "tipo": "ficha",
+      "tipo_ui": "sistema",
+      "tipo_label": "Sistema",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "osr",
+      "familia_label": "OSR",
+      "motor": "OSR d20",
+      "dados": [
+        "d20"
+      ],
+      "recursos": [
+        "reglas",
+        "osr",
+        "ligero",
+        "antorchas"
+      ],
+      "alias": [
+        "Shadowdark",
+        "OSR moderno",
+        "antorchas"
+      ],
+      "icono": "🕯️",
+      "color": "#6366f1",
+      "tags": [
+        "fantasia",
+        "osr",
+        "d20",
+        "ligero"
+      ],
+      "resumen": "OSR moderno con reglas claras, antorchas en tiempo real, sin visión en la oscuridad y magia que se tira para lanzar. Diseñado para mesas rápidas y para dirigir sin preparación.",
+      "fuente": "BIBLIOTECA_TTRPG.md §6.4",
+      "seccion": "6.4",
+      "orden": 604,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/fantasia/shadowdark.md"
+    },
+    {
+      "id": "ose",
+      "titulo": "Old-School Essentials y OSR",
+      "titulo_original": "Old-School Essentials y OSR",
+      "genero": "fantasia",
+      "genero_label": "Fantasía",
+      "tipo": "coleccion",
+      "tipo_ui": "coleccion",
+      "tipo_label": "Colección",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "osr",
+      "familia_label": "OSR",
+      "motor": "OSR d20",
+      "dados": [
+        "d20"
+      ],
+      "recursos": [
+        "osr",
+        "B/X",
+        "DCC",
+        "Knave",
+        "Cairn"
+      ],
+      "alias": [
+        "Old-School Essentials",
+        "OSE",
+        "OSR",
+        "B/X"
+      ],
+      "icono": "📜",
+      "color": "#84cc16",
+      "tags": [
+        "fantasia",
+        "osr",
+        "bx",
+        "colección",
+        "coleccion"
+      ],
+      "resumen": "Old-School Essentials y una caja de herramientas OSR: B/X limpio, DCC, Knave, Cairn, Troika y más.",
+      "fuente": "BIBLIOTECA_TTRPG.md §6.5",
+      "seccion": "6.5",
+      "orden": 605,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/fantasia/ose.md"
+    },
+    {
+      "id": "mork-borg",
+      "titulo": "Mörk Borg",
+      "titulo_original": "Mörk Borg",
+      "genero": "fantasia",
+      "genero_label": "Fantasía",
+      "tipo": "ficha",
+      "tipo_ui": "sistema",
+      "tipo_label": "Sistema",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "osr",
+      "familia_label": "OSR",
+      "motor": "OSR d20",
+      "dados": [
+        "d20"
+      ],
+      "recursos": [
+        "reglas",
+        "grimdark",
+        "arte",
+        "one-shot"
+      ],
+      "alias": [
+        "Mörk Borg",
+        "Mork Borg",
+        "fantasía negra"
+      ],
+      "icono": "💀",
+      "color": "#a1a1aa",
+      "tags": [
+        "fantasia",
+        "grimdark",
+        "osr",
+        "arte"
+      ],
+      "resumen": "Fantasía negra apocalíptica con arte brutal, reglas mínimas y un mundo que se acaba. Cada sesión puede ser la última. Ideal para one-shots y para romper el tono de una campaña larga.",
+      "fuente": "BIBLIOTECA_TTRPG.md §6.6",
+      "seccion": "6.6",
+      "orden": 606,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/fantasia/mork-borg.md"
+    },
+    {
+      "id": "forbidden-symbaroum",
+      "titulo": "Forbidden Lands y Symbaroum",
+      "titulo_original": "Forbidden Lands y Symbaroum",
+      "genero": "fantasia",
+      "genero_label": "Fantasía",
+      "tipo": "coleccion",
+      "tipo_ui": "coleccion",
+      "tipo_label": "Colección",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "year-zero",
+      "familia_label": "Year Zero",
+      "motor": "Year Zero d6",
+      "dados": [
+        "d6"
+      ],
+      "recursos": [
+        "hexcrawl",
+        "corrupción",
+        "supervivencia",
+        "oscuridad"
+      ],
+      "alias": [
+        "Forbidden Lands",
+        "Symbaroum",
+        "Year Zero",
+        "hexcrawl"
+      ],
+      "icono": "🌲",
+      "color": "#16a34a",
+      "tags": [
+        "fantasia",
+        "year-zero",
+        "hexcrawl",
+        "corrupción",
+        "coleccion"
+      ],
+      "resumen": "Dos fantasías oscuras de Free League: la supervivencia y el hexcrawl de Forbidden Lands, y la corrupción y el misterio de Symbaroum.",
+      "fuente": "BIBLIOTECA_TTRPG.md §6.7",
+      "seccion": "6.7",
+      "orden": 607,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/fantasia/forbidden-symbaroum.md"
+    },
+    {
+      "id": "blades-in-the-dark",
+      "titulo": "Blades in the Dark",
+      "titulo_original": "Blades in the Dark",
+      "genero": "fantasia",
+      "genero_label": "Fantasía",
+      "tipo": "ficha",
+      "tipo_ui": "sistema",
+      "tipo_label": "Sistema",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "forged-dark",
+      "familia_label": "Forged in the Dark",
+      "motor": "Forged in the Dark d6",
+      "dados": [
+        "d6"
+      ],
+      "recursos": [
+        "reglas",
+        "golpes",
+        "relojes",
+        "banda"
+      ],
+      "alias": [
+        "Blades in the Dark",
+        "Forged in the Dark",
+        "Doskvol",
+        "relojes"
+      ],
+      "icono": "🗡️",
+      "color": "#0ea5e9",
+      "tags": [
+        "fantasia",
+        "forged-in-the-dark",
+        "golpes",
+        "banda"
+      ],
+      "resumen": "Una banda de ladrones en la ciudad industrial-fantasma de Doskvol. Cada sesión es un golpe; entre golpes hay downtime. El juego usa relojes, flashbacks y posición/efecto para resolver la…",
+      "fuente": "BIBLIOTECA_TTRPG.md §6.8",
+      "seccion": "6.8",
+      "orden": 608,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/fantasia/blades-in-the-dark.md"
+    },
+    {
+      "id": "ironsworn",
+      "titulo": "Ironsworn",
+      "titulo_original": "Ironsworn",
+      "genero": "fantasia",
+      "genero_label": "Fantasía",
+      "tipo": "ficha",
+      "tipo_ui": "sistema",
+      "tipo_label": "Sistema",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "pbta",
+      "familia_label": "PbtA",
+      "motor": "PbtA 2d10 + oráculos",
+      "dados": [
+        "2d10",
+        "d100"
+      ],
+      "recursos": [
+        "reglas",
+        "solo-coop",
+        "oráculos",
+        "gratis"
+      ],
+      "alias": [
+        "Ironsworn",
+        "solo",
+        "cooperativo",
+        "oráculos",
+        "juramentos"
+      ],
+      "icono": "🐺",
+      "color": "#14b8a6",
+      "tags": [
+        "fantasia",
+        "solo-coop",
+        "oráculos",
+        "gratis"
+      ],
+      "resumen": "Un RPG de fantasía oscura diseñado para solo, cooperativo o guiado sin DM. Los PJ hacen juramentos, viajan, luchan y enfrentan peligros; los oráculos responden preguntas.",
+      "fuente": "BIBLIOTECA_TTRPG.md §6.9",
+      "seccion": "6.9",
+      "orden": 609,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/fantasia/ironsworn.md"
+    },
+    {
+      "id": "the-one-ring",
+      "titulo": "The One Ring 2e",
+      "titulo_original": "The One Ring 2e",
+      "genero": "fantasia",
+      "genero_label": "Fantasía",
+      "tipo": "ficha",
+      "tipo_ui": "sistema",
+      "tipo_label": "Sistema",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "propio",
+      "familia_label": "Propio",
+      "motor": "d12 + 2d6",
+      "dados": [
+        "d12",
+        "d6"
+      ],
+      "recursos": [
+        "reglas",
+        "Tolkien",
+        "viaje",
+        "esperanza",
+        "sombra"
+      ],
+      "alias": [
+        "The One Ring",
+        "TOR",
+        "Tolkien",
+        "Tierra Media"
+      ],
+      "icono": "💍",
+      "color": "#eab308",
+      "tags": [
+        "fantasia",
+        "tolkien",
+        "viaje",
+        "d12"
+      ],
+      "resumen": "La mejor adaptación de Tolkien al rol: viaje, esperanza, sombra, comunidades y canciones. El sistema de viaje y audiencias es una clase magistral de pacing.",
+      "fuente": "BIBLIOTECA_TTRPG.md §6.10",
+      "seccion": "6.10",
+      "orden": 610,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/fantasia/the-one-ring.md"
+    },
+    {
+      "id": "marca-del-este",
+      "titulo": "Aventuras en la Marca del Este",
+      "titulo_original": "Aventuras en la Marca del Este",
+      "genero": "fantasia",
+      "genero_label": "Fantasía",
+      "tipo": "ficha",
+      "tipo_ui": "sistema",
+      "tipo_label": "Sistema",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "osr",
+      "familia_label": "OSR",
+      "motor": "OSR d20",
+      "dados": [
+        "d20"
+      ],
+      "recursos": [
+        "reglas",
+        "osr",
+        "español",
+        "cajas de inicio"
+      ],
+      "alias": [
+        "Marca del Este",
+        "Aventuras en la Marca del Este",
+        "OSR español"
+      ],
+      "icono": "🏰",
+      "color": "#f97316",
+      "tags": [
+        "fantasia",
+        "osr",
+        "español",
+        "clásico"
+      ],
+      "resumen": "El OSR español clásico, con cajas de inicio (Roja, Azul, Verde, Negra) y una comunidad muy activa. Fantasía clásica, dungeon, hexcrawl y tono de los 80.",
+      "fuente": "BIBLIOTECA_TTRPG.md §6.11",
+      "seccion": "6.11",
+      "orden": 611,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/fantasia/marca-del-este.md"
+    },
+    {
+      "id": "frostgrave",
+      "titulo": "Frostgrave y otros wargames OSR",
+      "titulo_original": "Frostgrave, Rangers of Shadow Deep y Oathmark",
+      "genero": "fantasia",
+      "genero_label": "Fantasía",
+      "tipo": "coleccion",
+      "tipo_ui": "coleccion",
+      "tipo_label": "Colección",
+      "categoria": "wargame",
+      "categoria_label": "Wargame",
+      "familia": "d20",
+      "familia_label": "d20",
+      "motor": "d20 de escaramuza",
+      "dados": [
+        "d20"
+      ],
+      "recursos": [
+        "miniaturas",
+        "escaramuza",
+        "campaña",
+        "cooperativo"
+      ],
+      "alias": [
+        "Frostgrave",
+        "Rangers of Shadow Deep",
+        "Oathmark",
+        "wargame OSR"
+      ],
+      "icono": "❄️",
+      "color": "#38bdf8",
+      "tags": [
+        "fantasia",
+        "minis",
+        "wargame",
+        "escaramuza",
+        "coleccion"
+      ],
+      "resumen": "Frostgrave, Rangers of Shadow Deep y Oathmark: escaramuzas, campañas cooperativas y batallas de fantasía con minis.",
+      "fuente": "BIBLIOTECA_TTRPG.md §6.12",
+      "seccion": "6.12",
+      "orden": 612,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/fantasia/frostgrave.md"
+    },
+    {
+      "id": "juegos-mesa-fantasia",
+      "titulo": "Juegos de mesa de fantasía",
+      "titulo_original": "Juegos de mesa de fantasía",
+      "genero": "fantasia",
+      "genero_label": "Fantasía",
+      "tipo": "coleccion",
+      "tipo_ui": "coleccion",
+      "tipo_label": "Colección",
+      "categoria": "juego-de-mesa",
+      "categoria_label": "Juego de mesa",
+      "familia": "mesa",
+      "familia_label": "Juego de mesa",
+      "motor": "Juegos de mesa",
+      "dados": [
+        "d6",
+        "d8",
+        "d12"
+      ],
+      "recursos": [
+        "tableros",
+        "miniaturas",
+        "cartas",
+        "cooperativo"
+      ],
+      "alias": [
+        "Juegos de mesa de fantasía",
+        "Descent",
+        "HeroQuest",
+        "Gloomhaven"
+      ],
+      "icono": "🎲",
+      "color": "#a855f7",
+      "tags": [
+        "fantasia",
+        "juegos-de-mesa",
+        "minis",
+        "cartas",
+        "coleccion"
+      ],
+      "resumen": "Juegos de mesa de fantasía con minis, cartas y tableros para transiciones rápidas o partidas tácticas.",
+      "fuente": "BIBLIOTECA_TTRPG.md §6.13",
+      "seccion": "6.13",
+      "orden": 613,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/fantasia/juegos-mesa-fantasia.md"
+    },
+    {
+      "id": "campanas-fantasia",
+      "titulo": "Campañas de fantasía",
+      "titulo_original": "Campañas de fantasía",
+      "genero": "fantasia",
+      "genero_label": "Fantasía",
+      "tipo": "indice",
+      "tipo_ui": "indice",
+      "tipo_label": "Índice",
+      "categoria": "guia",
+      "categoria_label": "Guía",
+      "familia": "varios",
+      "familia_label": "Varios motores",
+      "motor": "Varios",
+      "dados": [],
+      "recursos": [
+        "campañas",
+        "starters",
+        "guía"
+      ],
+      "alias": [
+        "Campañas de fantasía",
+        "starters fantasía"
+      ],
+      "icono": "🗺️",
+      "color": "#f59e0b",
+      "tags": [
+        "fantasia",
+        "campañas",
+        "índice"
+      ],
+      "resumen": "Índice de campañas y starters de fantasía: duración, tono y notas para preparar la siguiente partida.",
+      "fuente": "BIBLIOTECA_TTRPG.md §6.14",
+      "seccion": "6.14",
+      "orden": 614,
+      "actualizado": "2026-10-22",
+      "ruta": "indices/campanas-fantasia.md"
+    },
+    {
+      "id": "panorama-sistemas-rol",
+      "titulo": "Panorama de sistemas de rol",
+      "titulo_original": "Panorama de sistemas de rol",
+      "genero": "universal",
+      "genero_label": "Universal",
+      "tipo": "documento",
+      "tipo_ui": "documento",
+      "tipo_label": "Documento",
+      "categoria": "guia",
+      "categoria_label": "Guía",
+      "familia": "varios",
+      "familia_label": "Varios motores",
+      "motor": "d20 / d100 / 2d6 / Fate / 3d6",
+      "dados": [
+        "d20",
+        "d100",
+        "2d6",
+        "dF",
+        "3d6"
+      ],
+      "recursos": [
+        "guía",
+        "familias mecánicas",
+        "PDF",
+        "comparativa"
+      ],
+      "alias": [
+        "Principales sistemas de rol de mesa",
+        "familias de sistemas",
+        "d20",
+        "BRP",
+        "PbtA",
+        "Fate",
+        "GURPS"
+      ],
+      "icono": "🧭",
+      "color": "#38bdf8",
+      "tags": [
+        "universal",
+        "guia",
+        "familias-mecanicas",
+        "pdf",
+        "sistemas"
+      ],
+      "resumen": "Guía de las cinco grandes familias mecánicas del rol: d20, d100/BRP, PbtA, Fate y 3d6/GURPS, con criterios para elegir y encasillar un sistema.",
+      "fuente": "principales sistemas de rol de mesa.pdf",
+      "seccion": "PDF",
+      "orden": 700,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/universal/panorama-sistemas-rol.md"
+    },
+    {
+      "id": "mythic-gme",
+      "titulo": "Mythic GME y oráculos",
+      "titulo_original": "Mythic GME y oráculos",
+      "genero": "universal",
+      "genero_label": "Universal",
+      "tipo": "sistema",
+      "tipo_ui": "sistema",
+      "tipo_label": "Sistema",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "oraculo",
+      "familia_label": "Oráculo",
+      "motor": "Oráculo d100",
+      "dados": [
+        "d100"
+      ],
+      "recursos": [
+        "oráculos",
+        "solo-coop",
+        "generador",
+        "tablas"
+      ],
+      "alias": [
+        "Mythic",
+        "Mythic GME",
+        "Game Master Emulator",
+        "oráculo",
+        "caos"
+      ],
+      "icono": "🎲",
+      "color": "#a78bfa",
+      "tags": [
+        "universal",
+        "oraculo",
+        "solo-coop",
+        "mythic",
+        "generador",
+        "d100"
+      ],
+      "resumen": "Mythic Game Master Emulator: preguntas de sí/no, significado de eventos, ajuste de escenas y generación de complicaciones para jugar solo o improvisar.",
+      "fuente": "Mythic Game Master Emulator (referencia)",
+      "seccion": "Generadores",
+      "orden": 701,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/universal/mythic-gme.md"
+    },
+    {
+      "id": "sistemas-genericos",
+      "titulo": "Sistemas genéricos",
+      "titulo_original": "Sistemas genéricos",
+      "genero": "universal",
+      "genero_label": "Universal",
+      "tipo": "coleccion",
+      "tipo_ui": "coleccion",
+      "tipo_label": "Colección",
+      "categoria": "rol",
+      "categoria_label": "Rol",
+      "familia": "varios",
+      "familia_label": "Varios motores",
+      "motor": "Varios (3d6, Fate, d6 pool, BRP)",
+      "dados": [
+        "3d6",
+        "dF",
+        "d6",
+        "d100"
+      ],
+      "recursos": [
+        "reglas",
+        "universal",
+        "genérico",
+        "herramientas"
+      ],
+      "alias": [
+        "Sistemas genéricos",
+        "GURPS",
+        "Fate",
+        "Savage Worlds",
+        "Cypher",
+        "BRP"
+      ],
+      "icono": "🧰",
+      "color": "#22c55e",
+      "tags": [
+        "universal",
+        "generico",
+        "gurps",
+        "fate",
+        "savage-worlds",
+        "cypher",
+        "brp"
+      ],
+      "resumen": "Motores universales para cualquier ambientación: GURPS, Fate, Savage Worlds, Cypher System y BRP. Útiles cuando no hay un sistema específico o se quiere convertir una idea.",
+      "fuente": "Biblioteca TTRPG + principales sistemas de rol de mesa.pdf",
+      "seccion": "Universal",
+      "orden": 702,
+      "actualizado": "2026-10-22",
+      "ruta": "fichas/universal/sistemas-genericos.md"
+    }
+  ]
+}

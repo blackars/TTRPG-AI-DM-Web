@@ -1,6 +1,6 @@
 # Módulos de TTRPG-Assistant
 
-Este documento es el mapa de los **16 módulos** registrados. La fuente de verdad del render es `web/src/modules/registry.tsx`; su gemelo de validación es `api/registry.py`. Toda pantalla se compone desde ahí, nunca con imports directos.
+Este documento es el mapa de los **17 módulos** registrados. La fuente de verdad del render es `web/src/modules/registry.tsx`; su gemelo de validación es `api/registry.py`. Toda pantalla se compone desde ahí, nunca con imports directos.
 
 ## Contrato común
 
@@ -33,6 +33,7 @@ POST /api/modules/<id>/action
 | Partidas guardadas | `partidas` | principal | `modules/saves.py` | guardar/cargar/borrar + export/import |
 | Asistente IA | `asistente` | overlay | `modules/assistant.py` | `limpiar` + chat en `/api/assistant/turn` |
 | MiniBase | `minibase` | lateral | `modules/minibase.py` | `probar`, `buscar`, `importar`, `publicar_escena` |
+| Biblioteca TTRPG | `biblioteca` | principal | `modules/biblioteca.py` + `library.py` | `seleccionar`, `limpiar`, `vincular_documento`, `mythic_tirar` |
 | Editor de pantallas | `editor` | overlay | `modules/core.py` | crear pantalla, añadir/quitar/colapsar módulo |
 
 ---
@@ -175,6 +176,24 @@ POST /api/modules/<id>/action
 - **Persistencia:** `mini_links` con `external_key` (`minibase:<id>`) para evitar duplicados.
 - **Contexto:** `minibase.configurado`, `minibase.enlaces` y badge.
 - **Regla de oro:** integración **read-only**; este repo no arranca ni modifica MiniBase.
+
+## Biblioteca TTRPG (`biblioteca`)
+
+- **Frontend:** `web/src/modules/BibliotecaModule.tsx`, render Markdown en `web/src/components/MarkdownView.tsx`.
+- **Qué hace:** catálogo de fichas de sistemas, wargames, juegos de mesa, literatura y guías. Permite buscar, filtrar por categoría/género/tipo/motor, leer la ficha, activar un sistema para la mesa, consultar los generadores Mythic y subir material propio.
+- **Fuente editable:** `biblioteca/` (fichas en Markdown, `taxonomia.json`, índices y PDF). `biblioteca/tools/build_index.py` regenera `datos.js`, `fichas.json` e `INDICE.md`.
+- **API:**
+  - `GET /api/modules/biblioteca/state` → catálogo, facetas, sistema activo, documentos, estadísticas y generadores.
+  - `POST /api/modules/biblioteca/action` → `seleccionar`, `limpiar`, `vincular_documento`, `desvincular_documento`, `mythic_tirar`.
+  - `GET /api/biblioteca/fichas/{id}` → ficha completa, personalización, enlaces y documentos vinculados.
+  - `GET /api/biblioteca/documentos` y `POST /api/biblioteca/documentos` → listar y subir `.md`, `.txt` o `.pdf`.
+  - `GET /api/biblioteca/documentos/{id}` → texto extraído (PDF con `pypdf`); `GET .../archivo` → descarga; `DELETE` → borra solo subidas.
+  - `GET /api/biblioteca/contexto` → versión resumida para depuración del contexto IA.
+- **Clasificación:** `biblioteca/taxonomia.json` mezcla `categoria`, `tipo_ui`, `familia`, `motor`, `dados`, `recursos` y `alias` sobre el front matter original. Los valores `tipo` originales se conservan para no romper la interfaz clásica.
+- **Persistencia:** sistema activo y vínculos en `app_kv`; documentos subidos en `api/data/biblioteca/` (fuera de Git). Los PDF se cachean como texto en `api/data/biblioteca_cache/`.
+- **Contexto IA:** `biblioteca.sistema_activo`, `ficha_base`, `personalizacion`, `documentos_vinculados` y badge `biblioteca`. El prompt ordena usar ese marco y no inventar reglas.
+- **Interfaz clásica:** `GET /biblioteca-clasica/index.html` sirve la biblioteca original sin build; los assets están en `/biblioteca-assets/`.
+- **No hace:** no arranca MiniBase, no modifica reglas activas y no ejecuta tiradas Mythic desde el prompt sin confirmación del usuario.
 
 ## Editor de pantallas (`editor`)
 

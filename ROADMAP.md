@@ -4,7 +4,7 @@ Memoria del proyecto entre sesiones. Cada fase se cierra con tests, `npm run bui
 
 ## Estado general
 
-**MVP completo:** fases M0–M9 implementadas. Backend con **14 tests en verde**, frontend compilando y demo funcional en `http://127.0.0.1:3010/pantalla/mesa`.
+**MVP completo:** fases M0–M10 implementadas. Backend con **17 tests en verde**, frontend compilando y demo funcional en `http://127.0.0.1:3010/pantalla/mesa`.
 
 - API: `http://127.0.0.1:8100`
 - Web: `http://127.0.0.1:3010`
@@ -25,6 +25,7 @@ Memoria del proyecto entre sesiones. Cada fase se cierra con tests, `npm run bui
 | **M7** | Personajes/criaturas/NPCs, textos IA, snapshots de partida, export/import | ✅ | `characters.py`, `npcs.py`, `saves.py`, `PartidasModule` |
 | **M8** | Sonidos por escena, WebAudio sintético, archivos locales, crossfade | ✅ | `sounds.py`, `lib/audio.ts`, `SonidoModule` |
 | **M9** | Adaptador MiniBase read-only (catálogo, vínculos, table_state) sin bloquear la app | ✅ (degradado) | `minibase.py`, `MiniBaseModule`, `mini_links`; falta probar contra una instancia real con token |
+| **M10** | Biblioteca TTRPG integrada: fichas, taxonomía, documentos propios, sistema activo y generadores Mythic | ✅ | `biblioteca/`, `library.py`, `modules/biblioteca.py`, `BibliotecaModule`, `taxonomia.json`, `documentos/`, tests |
 
 ## Decisiones de arquitectura
 
@@ -37,6 +38,9 @@ Memoria del proyecto entre sesiones. Cada fase se cierra con tests, `npm run bui
 - Sonido: presets sintéticos WebAudio + archivos opcionales en `api/data/sounds/`.
 - El layout se refresca con polling de eventos cada 4 s; las pantallas no se desmontan al refrescar (bug corregido en M5/M0).
 - MiniBase es solo lectura y opcional; si no hay URL/token, el módulo muestra el modo local.
+- La biblioteca es un módulo más: la fuente editable vive en `biblioteca/`, la API la lee en caliente y el sistema activo + documentos vinculados entran en el contexto del asistente.
+- La taxonomía editorial no reescribe las fichas originales: se mezcla desde `biblioteca/taxonomia.json` en el índice y en la API.
+- Las subidas de material propio van a `api/data/biblioteca/` y nunca se versionan; los PDF se leen con `pypdf` y se cachean como texto.
 
 ## Checklist final de demo (sección 10 del prompt)
 
@@ -51,6 +55,7 @@ Memoria del proyecto entre sesiones. Cada fase se cierra con tests, `npm run bui
 - [x] Guardar partida, recargar, cargar y encontrar todo igual.
 - [x] Export/import JSON de partida.
 - [x] (M9) Buscar mini real y usarla como token/item **cuando hay MiniBase configurada**; sin conexión el módulo degrada sin romper nada.
+- [x] (M10) Abrir Biblioteca, filtrar fichas, activar un sistema, leer el PDF de familias, tirar Mythic y ver el contexto del asistente actualizado.
 - [x] Todo el estado en `GET /api/assistant/context`, coherente y listo para la IA.
 
 ## Pendientes / ideas futuras (no bloquean el MVP)
@@ -62,6 +67,7 @@ Memoria del proyecto entre sesiones. Cada fase se cierra con tests, `npm run bui
 5. **Autenticación/multiusuario** si el proyecto sale de la mesa local.
 6. **WebSocket/SSE** en lugar de polling para el bus de eventos.
 7. **Tests E2E** automatizados en CI (hoy hay CDP manual + pytest + build).
+8. **Biblioteca:** revisar una a una las campañas/enlaces heredados, añadir logos con licencia y medir el contexto con un modelo real (hoy se recorta a ~14k caracteres).
 
 ## Cómo retomar
 

@@ -1,0 +1,476 @@
+{
+  "version": 1,
+  "nota": "Clasificación editorial de la biblioteca. El build_index.py la mezcla con el front matter sin sobrescribir los .md.",
+  "categorias": {
+    "rol": "Rol",
+    "wargame": "Wargame",
+    "juego-de-mesa": "Juego de mesa",
+    "literatura": "Literatura",
+    "guia": "Guía"
+  },
+  "tipos": {
+    "sistema": "Sistema",
+    "coleccion": "Colección",
+    "indice": "Índice",
+    "documento": "Documento"
+  },
+  "familias": {
+    "d20": "d20",
+    "d100": "d100 / BRP",
+    "2d6": "2d6",
+    "d6-pool": "d6 pool",
+    "d10-pool": "d10 pool",
+    "2d20": "2d20",
+    "age": "AGE",
+    "osr": "OSR",
+    "year-zero": "Year Zero",
+    "pbta": "PbtA",
+    "forged-dark": "Forged in the Dark",
+    "narrativo": "Narrativo",
+    "propio": "Propio",
+    "oraculo": "Oráculo",
+    "literatura": "Literatura",
+    "mesa": "Juego de mesa",
+    "varios": "Varios motores"
+  },
+  "fichas": {
+    "stargrave": {
+      "categoria": "wargame",
+      "tipo": "sistema",
+      "familia": "d20",
+      "motor": "d20 de escaramuza",
+      "dados": ["d20"],
+      "recursos": ["miniaturas", "cartas", "campaña", "solo-coop"],
+      "alias": ["Stargrave", "escaramuza sci-fi", "galaxia devastada"]
+    },
+    "vieja-estrella": {
+      "categoria": "rol",
+      "tipo": "sistema",
+      "familia": "osr",
+      "motor": "OSR d20",
+      "dados": ["d20"],
+      "recursos": ["reglas", "gratis", "español"],
+      "alias": ["Vieja Estrella", "retroclon", "OSR español"]
+    },
+    "cyberpunk": {
+      "categoria": "rol",
+      "tipo": "sistema",
+      "familia": "d10-pool",
+      "motor": "Interlock d10",
+      "dados": ["d10"],
+      "recursos": ["reglas", "dados", "miniaturas", "ciberware"],
+      "alias": ["Cyberpunk 2020", "Cyberpunk RED", "Night City", "Mike Pondsmith"]
+    },
+    "alien": {
+      "categoria": "rol",
+      "tipo": "sistema",
+      "familia": "year-zero",
+      "motor": "Year Zero d6",
+      "dados": ["d6"],
+      "recursos": ["reglas", "dados", "cartas", "campaña", "cinemático"],
+      "alias": ["Alien RPG", "xenomorfo", "horror espacial"]
+    },
+    "star-wars": {
+      "categoria": "rol",
+      "tipo": "sistema",
+      "familia": "narrativo",
+      "motor": "Dados narrativos (Genesys)",
+      "dados": ["d8", "d12"],
+      "recursos": ["reglas", "dados", "campaña", "space-opera"],
+      "alias": ["Star Wars", "Edge of the Empire", "Age of Rebellion", "Force and Destiny"]
+    },
+    "mothership": {
+      "categoria": "rol",
+      "tipo": "sistema",
+      "familia": "d100",
+      "motor": "d100 / OSR",
+      "dados": ["d100"],
+      "recursos": ["reglas", "dados", "osr", "horror espacial"],
+      "alias": ["Mothership", "horror espacial", "contratistas"]
+    },
+    "stars-without-number": {
+      "categoria": "rol",
+      "tipo": "sistema",
+      "familia": "osr",
+      "motor": "OSR d20 / 2d6",
+      "dados": ["d20", "2d6"],
+      "recursos": ["reglas", "sandbox", "facciones", "sector"],
+      "alias": ["Stars Without Number", "SWN", "sandbox espacial"]
+    },
+    "traveller": {
+      "categoria": "rol",
+      "tipo": "sistema",
+      "familia": "2d6",
+      "motor": "2d6",
+      "dados": ["2d6"],
+      "recursos": ["reglas", "comercio", "nave", "space-opera"],
+      "alias": ["Traveller", "lifepath", "comercio espacial"]
+    },
+    "lancer": {
+      "categoria": "rol",
+      "tipo": "sistema",
+      "familia": "d20",
+      "motor": "d20 táctico",
+      "dados": ["d20"],
+      "recursos": ["reglas", "mechs", "cuadrícula", "gratis"],
+      "alias": ["Lancer", "mechs", "combate táctico"]
+    },
+    "blade-runner": {
+      "categoria": "rol",
+      "tipo": "sistema",
+      "familia": "year-zero",
+      "motor": "Year Zero d6",
+      "dados": ["d6"],
+      "recursos": ["reglas", "investigación", "neo-noir", "caso"],
+      "alias": ["Blade Runner", "replicantes", "neo-noir"]
+    },
+    "star-trek": {
+      "categoria": "rol",
+      "tipo": "sistema",
+      "familia": "2d20",
+      "motor": "2d20",
+      "dados": ["d20"],
+      "recursos": ["reglas", "diplomacia", "tripulación", "momentum"],
+      "alias": ["Star Trek Adventures", "2d20", "tripulación estelar"]
+    },
+    "warhammer-40k": {
+      "categoria": "rol",
+      "tipo": "coleccion",
+      "familia": "varios",
+      "motor": "Varios (d6, d100, d20)",
+      "dados": ["d6", "d100", "d20"],
+      "recursos": ["miniaturas", "grimdark", "campaña", "wargame"],
+      "alias": ["Warhammer 40.000", "40k", "Wrath & Glory", "Dark Heresy", "Necromunda", "Kill Team"]
+    },
+    "dune": {
+      "categoria": "rol",
+      "tipo": "sistema",
+      "familia": "2d20",
+      "motor": "2d20",
+      "dados": ["d20"],
+      "recursos": ["reglas", "intriga", "política", "especia"],
+      "alias": ["Dune", "2d20", "casas nobles"]
+    },
+    "the-expanse": {
+      "categoria": "rol",
+      "tipo": "sistema",
+      "familia": "age",
+      "motor": "AGE 3d6",
+      "dados": ["3d6"],
+      "recursos": ["reglas", "space-opera", "tripulación", "política"],
+      "alias": ["The Expanse", "AGE", "hard sci-fi"]
+    },
+    "cyberpunk-osr": {
+      "categoria": "rol",
+      "tipo": "coleccion",
+      "familia": "varios",
+      "motor": "Varios (d20, 2d6, d6 pool)",
+      "dados": ["d20", "2d6", "d6"],
+      "recursos": ["cyberpunk", "osr", "miniaturas", "campaña"],
+      "alias": ["Cyberpunk OSR", "CY_BORG", "Zaibatsu", "The Sprawl", "Carbon 2185"],
+      "titulo_ui": "Cyberpunk OSR y derivados"
+    },
+    "wargames-sci-fi": {
+      "categoria": "wargame",
+      "tipo": "coleccion",
+      "familia": "varios",
+      "motor": "Varios (d6 pool, d20, 2d6)",
+      "dados": ["d6", "d20", "2d6"],
+      "recursos": ["miniaturas", "escaramuza", "campaña", "tablero"],
+      "alias": ["Wargames sci-fi", "Necromunda", "Kill Team", "Infinity", "Battletech", "Gaslands"],
+      "titulo_ui": "Wargames de ciencia ficción"
+    },
+    "campanas-sci-fi": {
+      "categoria": "guia",
+      "tipo": "indice",
+      "familia": "varios",
+      "motor": "Varios",
+      "dados": [],
+      "recursos": ["campañas", "starters", "guía"],
+      "alias": ["Campañas de ciencia ficción", "starters sci-fi"]
+    },
+    "lovecraft": {
+      "categoria": "literatura",
+      "tipo": "documento",
+      "familia": "literatura",
+      "motor": "Literatura",
+      "dados": [],
+      "recursos": ["mythos", "literatura", "dominio público", "ambientación"],
+      "alias": ["Lovecraft", "Mythos", "Cthulhu", "horror cósmico"],
+      "titulo_ui": "Lovecraft y el Mythos"
+    },
+    "call-of-cthulhu": {
+      "categoria": "rol",
+      "tipo": "sistema",
+      "familia": "d100",
+      "motor": "d100 / BRP",
+      "dados": ["d100"],
+      "recursos": ["reglas", "investigación", "horror", "campaña"],
+      "alias": ["La Llamada de Cthulhu", "Call of Cthulhu", "CoC", "BRP"]
+    },
+    "innsmouth": {
+      "categoria": "literatura",
+      "tipo": "documento",
+      "familia": "literatura",
+      "motor": "Literatura",
+      "dados": [],
+      "recursos": ["novela", "mythos", "adaptación"],
+      "alias": ["La sombra sobre Innsmouth", "Innsmouth", "Deep Ones"]
+    },
+    "arkham-horror-rpg": {
+      "categoria": "rol",
+      "tipo": "sistema",
+      "familia": "d6-pool",
+      "motor": "d6 pool",
+      "dados": ["d6"],
+      "recursos": ["reglas", "pulp", "Arkham", "investigación"],
+      "alias": ["Arkham Horror RPG", "Arkham", "pulp"]
+    },
+    "arkham-horror-juegos": {
+      "categoria": "juego-de-mesa",
+      "tipo": "coleccion",
+      "familia": "mesa",
+      "motor": "Juegos de mesa",
+      "dados": ["d6", "d8"],
+      "recursos": ["tableros", "miniaturas", "cartas", "cooperativo"],
+      "alias": ["Arkham Horror", "Mansions of Madness", "Eldritch Horror", "Elder Sign"],
+      "titulo_ui": "Arkham Horror (juegos de mesa)"
+    },
+    "delta-green": {
+      "categoria": "rol",
+      "tipo": "sistema",
+      "familia": "d100",
+      "motor": "d100 / BRP",
+      "dados": ["d100"],
+      "recursos": ["reglas", "conspiración", "moderno", "investigación"],
+      "alias": ["Delta Green", "BRP", "conspiración"]
+    },
+    "vaesen": {
+      "categoria": "rol",
+      "tipo": "sistema",
+      "familia": "year-zero",
+      "motor": "Year Zero d6",
+      "dados": ["d6"],
+      "recursos": ["reglas", "folclore", "investigación", "base"],
+      "alias": ["Vaesen", "folclore nórdico", "Year Zero"]
+    },
+    "candela-obscura": {
+      "categoria": "rol",
+      "tipo": "sistema",
+      "familia": "d6-pool",
+      "motor": "d6 pool",
+      "dados": ["d6"],
+      "recursos": ["reglas", "victoriano", "actual-play", "investigación"],
+      "alias": ["Candela Obscura", "Newfaire", "Critical Role"]
+    },
+    "kult": {
+      "categoria": "rol",
+      "tipo": "sistema",
+      "familia": "pbta",
+      "motor": "PbtA 2d10",
+      "dados": ["2d10"],
+      "recursos": ["reglas", "horror", "adultos", "gnóstico"],
+      "alias": ["Kult", "Divinity Lost", "PbtA", "horror gnóstico"]
+    },
+    "horror-one-shots": {
+      "categoria": "rol",
+      "tipo": "coleccion",
+      "familia": "varios",
+      "motor": "Varios",
+      "dados": ["d6", "d10"],
+      "recursos": ["one-shot", "pacing", "horror", "experimental"],
+      "alias": ["One-shots de horror", "Ten Candles", "Dread", "Trophy Dark"]
+    },
+    "vampiro": {
+      "categoria": "rol",
+      "tipo": "sistema",
+      "familia": "d10-pool",
+      "motor": "d10 pool (Storyteller)",
+      "dados": ["d10"],
+      "recursos": ["reglas", "World of Darkness", "política", "horror gótico"],
+      "alias": ["Vampiro", "Vampire: The Masquerade", "V5", "World of Darkness"]
+    },
+    "grimdark": {
+      "categoria": "rol",
+      "tipo": "coleccion",
+      "familia": "varios",
+      "motor": "Varios",
+      "dados": ["d20", "d6", "d100"],
+      "recursos": ["grimdark", "fantasía oscura", "horror"],
+      "alias": ["Grimdark", "Warhammer Fantasy", "Mörk Borg", "Shadow of the Demon Lord", "Symbaroum"]
+    },
+    "otras-investigaciones": {
+      "categoria": "rol",
+      "tipo": "coleccion",
+      "familia": "varios",
+      "motor": "Varios (GUMSHOE, PbtA)",
+      "dados": ["d6", "d10"],
+      "recursos": ["investigación", "GUMSHOE", "PbtA", "misterio"],
+      "alias": ["Investigación alternativa", "Trail of Cthulhu", "Brindlewood Bay", "Cthulhu Dark"],
+      "titulo_ui": "Investigación alternativa (GUMSHOE y PbtA)"
+    },
+    "campanas-horror": {
+      "categoria": "guia",
+      "tipo": "indice",
+      "familia": "varios",
+      "motor": "Varios",
+      "dados": [],
+      "recursos": ["campañas", "starters", "guía"],
+      "alias": ["Campañas de horror", "starters horror"]
+    },
+    "dnd-5e": {
+      "categoria": "rol",
+      "tipo": "sistema",
+      "familia": "d20",
+      "motor": "d20",
+      "dados": ["d20", "d4", "d6", "d8", "d10", "d12", "d100"],
+      "recursos": ["reglas", "dados", "miniaturas", "cartas", "campañas", "SRD"],
+      "alias": ["D&D", "Dungeons & Dragons", "5e", "2024", "SRD 5.2"]
+    },
+    "pathfinder-2e": {
+      "categoria": "rol",
+      "tipo": "sistema",
+      "familia": "d20",
+      "motor": "d20",
+      "dados": ["d20"],
+      "recursos": ["reglas", "táctico", "remaster", "builds"],
+      "alias": ["Pathfinder", "PF2", "Pathfinder 2e", "Remaster"]
+    },
+    "vieja-escuela": {
+      "categoria": "rol",
+      "tipo": "sistema",
+      "familia": "osr",
+      "motor": "OSR d20",
+      "dados": ["d20"],
+      "recursos": ["reglas", "osr", "gratis", "español"],
+      "alias": ["Vieja Escuela", "OSR español", "retroclon"]
+    },
+    "shadowdark": {
+      "categoria": "rol",
+      "tipo": "sistema",
+      "familia": "osr",
+      "motor": "OSR d20",
+      "dados": ["d20"],
+      "recursos": ["reglas", "osr", "ligero", "antorchas"],
+      "alias": ["Shadowdark", "OSR moderno", "antorchas"]
+    },
+    "ose": {
+      "categoria": "rol",
+      "tipo": "coleccion",
+      "familia": "osr",
+      "motor": "OSR d20",
+      "dados": ["d20"],
+      "recursos": ["osr", "B/X", "DCC", "Knave", "Cairn"],
+      "alias": ["Old-School Essentials", "OSE", "OSR", "B/X"]
+    },
+    "mork-borg": {
+      "categoria": "rol",
+      "tipo": "sistema",
+      "familia": "osr",
+      "motor": "OSR d20",
+      "dados": ["d20"],
+      "recursos": ["reglas", "grimdark", "arte", "one-shot"],
+      "alias": ["Mörk Borg", "Mork Borg", "fantasía negra"]
+    },
+    "forbidden-symbaroum": {
+      "categoria": "rol",
+      "tipo": "coleccion",
+      "familia": "year-zero",
+      "motor": "Year Zero d6",
+      "dados": ["d6"],
+      "recursos": ["hexcrawl", "corrupción", "supervivencia", "oscuridad"],
+      "alias": ["Forbidden Lands", "Symbaroum", "Year Zero", "hexcrawl"]
+    },
+    "blades-in-the-dark": {
+      "categoria": "rol",
+      "tipo": "sistema",
+      "familia": "forged-dark",
+      "motor": "Forged in the Dark d6",
+      "dados": ["d6"],
+      "recursos": ["reglas", "golpes", "relojes", "banda"],
+      "alias": ["Blades in the Dark", "Forged in the Dark", "Doskvol", "relojes"]
+    },
+    "ironsworn": {
+      "categoria": "rol",
+      "tipo": "sistema",
+      "familia": "pbta",
+      "motor": "PbtA 2d10 + oráculos",
+      "dados": ["2d10", "d100"],
+      "recursos": ["reglas", "solo-coop", "oráculos", "gratis"],
+      "alias": ["Ironsworn", "solo", "cooperativo", "oráculos", "juramentos"]
+    },
+    "the-one-ring": {
+      "categoria": "rol",
+      "tipo": "sistema",
+      "familia": "propio",
+      "motor": "d12 + 2d6",
+      "dados": ["d12", "d6"],
+      "recursos": ["reglas", "Tolkien", "viaje", "esperanza", "sombra"],
+      "alias": ["The One Ring", "TOR", "Tolkien", "Tierra Media"]
+    },
+    "marca-del-este": {
+      "categoria": "rol",
+      "tipo": "sistema",
+      "familia": "osr",
+      "motor": "OSR d20",
+      "dados": ["d20"],
+      "recursos": ["reglas", "osr", "español", "cajas de inicio"],
+      "alias": ["Marca del Este", "Aventuras en la Marca del Este", "OSR español"]
+    },
+    "frostgrave": {
+      "categoria": "wargame",
+      "tipo": "coleccion",
+      "familia": "d20",
+      "motor": "d20 de escaramuza",
+      "dados": ["d20"],
+      "recursos": ["miniaturas", "escaramuza", "campaña", "cooperativo"],
+      "alias": ["Frostgrave", "Rangers of Shadow Deep", "Oathmark", "wargame OSR"],
+      "titulo_ui": "Frostgrave y otros wargames OSR"
+    },
+    "juegos-mesa-fantasia": {
+      "categoria": "juego-de-mesa",
+      "tipo": "coleccion",
+      "familia": "mesa",
+      "motor": "Juegos de mesa",
+      "dados": ["d6", "d8", "d12"],
+      "recursos": ["tableros", "miniaturas", "cartas", "cooperativo"],
+      "alias": ["Juegos de mesa de fantasía", "Descent", "HeroQuest", "Gloomhaven"]
+    },
+    "campanas-fantasia": {
+      "categoria": "guia",
+      "tipo": "indice",
+      "familia": "varios",
+      "motor": "Varios",
+      "dados": [],
+      "recursos": ["campañas", "starters", "guía"],
+      "alias": ["Campañas de fantasía", "starters fantasía"]
+    },
+    "panorama-sistemas-rol": {
+      "categoria": "guia",
+      "tipo": "documento",
+      "familia": "varios",
+      "motor": "d20 / d100 / 2d6 / Fate / 3d6",
+      "dados": ["d20", "d100", "2d6", "dF", "3d6"],
+      "recursos": ["guía", "familias mecánicas", "PDF", "comparativa"],
+      "alias": ["Principales sistemas de rol de mesa", "familias de sistemas", "d20", "BRP", "PbtA", "Fate", "GURPS"]
+    },
+    "mythic-gme": {
+      "categoria": "rol",
+      "tipo": "sistema",
+      "familia": "oraculo",
+      "motor": "Oráculo d100",
+      "dados": ["d100"],
+      "recursos": ["oráculos", "solo-coop", "generador", "tablas"],
+      "alias": ["Mythic", "Mythic GME", "Game Master Emulator", "oráculo", "caos"]
+    },
+    "sistemas-genericos": {
+      "categoria": "rol",
+      "tipo": "coleccion",
+      "familia": "varios",
+      "motor": "Varios (3d6, Fate, d6 pool, BRP)",
+      "dados": ["3d6", "dF", "d6", "d100"],
+      "recursos": ["reglas", "universal", "genérico", "herramientas"],
+      "alias": ["Sistemas genéricos", "GURPS", "Fate", "Savage Worlds", "Cypher", "BRP"]
+    }
+  }
+}

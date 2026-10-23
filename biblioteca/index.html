@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Biblioteca de fichas TTRPG para un DM de IA: ciencia ficción, horror y fantasía.">
+  <title>Biblioteca TTRPG · DM IA</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <div class="app">
+
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">📚</div>
+        <div>
+          <strong>Biblioteca TTRPG</strong>
+          <span id="brand-sub">45 fichas · DM IA</span>
+        </div>
+      </div>
+
+      <div class="search-wrap">
+        <input id="q" type="search" placeholder="Buscar ficha, tag, regla…" autocomplete="off" aria-label="Buscar en la biblioteca">
+        <kbd>/</kbd>
+      </div>
+
+      <div class="filter-group">
+        <div class="filter-title">Género</div>
+        <div id="generos" class="chips"></div>
+      </div>
+
+      <div class="filter-group">
+        <div class="filter-title">Tipo</div>
+        <div id="tipos" class="chips"></div>
+      </div>
+
+      <div id="stats" class="stats" aria-label="Estadísticas"></div>
+
+      <div class="sidebar-foot">
+        <a href="README.md">Cómo usar la biblioteca</a> ·
+        <a href="fichas.json">fichas.json</a>
+        <span class="mini">Iconos propios. Para usar un logo oficial, añádelo en <code>assets/logos/</code> y declara <code>logo:</code> en el front matter.</span>
+        <span class="mini">Si editas un <code>.md</code>, ejecuta <code>python tools/build_index.py</code> y recarga la página.</span>
+      </div>
+    </aside>
+
+    <main class="lista">
+      <header class="lista-head">
+        <div>
+          <h1 id="lista-titulo">Todas las fichas</h1>
+          <p id="contador"></p>
+        </div>
+        <select id="orden" aria-label="Ordenar fichas">
+          <option value="orden">Orden biblioteca</option>
+          <option value="titulo">Título A-Z</option>
+          <option value="genero">Género</option>
+        </select>
+      </header>
+      <div id="cards" class="cards"></div>
+    </main>
+
+    <section id="detalle" class="detalle" aria-label="Detalle de la ficha">
+      <button type="button" id="cerrar" class="cerrar" aria-label="Cerrar detalle">×</button>
+
+      <div id="bienvenida" class="bienvenida">
+        <div class="gran-icono">📚</div>
+        <h1>Biblioteca TTRPG para un DM de IA</h1>
+        <p>
+          Explora <b id="bienvenida-total">45</b> fichas de ciencia ficción, horror y fantasía.
+          Cada archivo reúne reglas, campañas, dados, cartas, miniaturas y una zona reservada
+          para tus personalizaciones.
+        </p>
+
+        <div class="pasos">
+          <div class="paso">
+            <b>1</b>
+            <span><strong>Elige un universo.</strong> Filtra por género o busca por regla, campaña, dado o tag.</span>
+          </div>
+          <div class="paso">
+            <b>2</b>
+            <span><strong>Lee la ficha base.</strong> Contiene el sistema, el tono, el material disponible y el contenido relacionado.</span>
+          </div>
+          <div class="paso">
+            <b>3</b>
+            <span><strong>Personaliza.</strong> Edita la sección <em>Personalización del usuario</em> del <code>.md</code> con tus reglas, historias, locaciones y comandos para el agente.</span>
+          </div>
+        </div>
+
+        <div class="nota">
+          <strong>Para el DM IA:</strong> selecciona una ficha, lee su front matter y su cuerpo,
+          y después carga la sección <em>Personalización del usuario</em>. El índice legible por
+          máquina está en <code>fichas.json</code>.
+        </div>
+      </div>
+
+      <article id="ficha" class="ficha" hidden></article>
+    </section>
+
+  </div>
+
+  <script src="assets/marked.min.js"></script>
+  <script src="datos.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>

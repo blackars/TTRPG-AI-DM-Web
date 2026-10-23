@@ -143,6 +143,15 @@ MODULES: list[dict] = [
         "singleton": True,
     },
     {
+        "id": "biblioteca",
+        "nombre": "Biblioteca TTRPG",
+        "icono": "📚",
+        "descripcion": "Fichas de sistemas, wargames, literatura y documentos; sistema activo y generadores Mythic.",
+        "slot": "principal",
+        "overlay": False,
+        "singleton": True,
+    },
+    {
         "id": "editor",
         "nombre": "Editor de pantallas",
         "icono": "🧰",
