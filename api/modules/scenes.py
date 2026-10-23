@@ -2,20 +2,25 @@
 from __future__ import annotations
 
 import uuid
+from pathlib import Path
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from pydantic import BaseModel
 from sqlmodel import Session, select
 
-from db import get_session
+from db import ESCENARIOS_DIR, get_session
 from events import emit
 from models import Scene, SoundAsset
-from serializers import scene_dict, sound_dict
+from serializers import (
+    normalizar_presentacion, presentacion_dict, scene_dict, sound_dict,
+)
 from utils import dumps, loads
 
 router = APIRouter(tags=["escenarios"])
 
 GRID = {"cols": 12, "rows": 9}
+EXTENSIONES_MAPA = {".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif"}
+MAX_MAPA_BYTES = 15 * 1024 * 1024
 
 
 class EscenaAccion(BaseModel):
@@ -27,6 +32,7 @@ class EscenaAccion(BaseModel):
     bg: str | None = None
     light: dict | None = None
     playlist: list[int] | None = None
+    presentacion: dict | None = None
     token_id: str | None = None
     token_nombre: str | None = None
     emoji: str | None = None
@@ -44,6 +50,17 @@ def _escena(session: Session, sid: int | None) -> Scene:
     if not escena:
         raise HTTPException(404, "Escena no encontrada")
     return escena
+
+
+def _presentacion_actual(escena: Scene) -> dict:
+    return normalizar_presentacion(loads(escena.presentacion_json, {}))
+
+
+def _borrar_archivo_mapa(nombre: str) -> None:
+    if not nombre:
+        return
+    archivo = ESCENARIOS_DIR / Path(nombre).name
+    archivo.unlink(missing_ok=True)
 
 
 def _estado(session: Session) -> dict:
@@ -109,6 +126,7 @@ def accion_escenarios(data: EscenaAccion, session: Session = Depends(get_session
             light_json=dumps(data.light or {"color": "#f5b544", "opacity": 0.18}),
             tokens_json=dumps([]),
             playlist_json=dumps(data.playlist or []),
+            presentacion_json=dumps({}),
         )
         session.add(escena)
         session.commit()
@@ -139,6 +157,7 @@ def accion_escenarios(data: EscenaAccion, session: Session = Depends(get_session
         escena = _escena(session, data.id)
         if escena.activo:
             raise HTTPException(409, "No puedes borrar la escena activa; activa otra primero")
+        _borrar_archivo_mapa(_presentacion_actual(escena).get("mapa", ""))
         session.delete(escena)
         session.commit()
         emit(session, "escenario", "borrada", {"id": data.id})
@@ -156,6 +175,17 @@ def accion_escenarios(data: EscenaAccion, session: Session = Depends(get_session
         session.refresh(escena)
         datos = scene_dict(escena)
         emit(session, "escenario", "activada", datos)
+        return _estado(session)
+
+    if accion == "set_presentacion":
+        escena = _escena(session, data.scene_id or data.id)
+        fusion = {**_presentacion_actual(escena), **(data.presentacion or {})}
+        escena.presentacion_json = dumps(normalizar_presentacion(fusion))
+        session.add(escena)
+        session.commit()
+        emit(session, "escenario", "presentacion", {
+            "scene_id": escena.id, "presentacion": presentacion_dict(fusion),
+        })
         return _estado(session)
 
     if accion == "agregar_token":
@@ -222,3 +252,48 @@ def accion_escenarios(data: EscenaAccion, session: Session = Depends(get_session
         return _estado(session)
 
     raise HTTPException(400, f"Acción no soportada: {accion}")
+
+
+@router.post("/api/escenarios/{scene_id}/mapa")
+async def subir_mapa(
+    scene_id: int,
+    archivo: UploadFile = File(...),
+    session: Session = Depends(get_session),
+):
+    """Sube el mapa de una escena y lo deja listo para el proyector."""
+    escena = _escena(session, scene_id)
+    sufijo = Path(archivo.filename or "").suffix.lower()
+    if sufijo not in EXTENSIONES_MAPA:
+        raise HTTPException(400, "Formato no admitido. Usa JPG, PNG, WEBP, GIF o AVIF.")
+    contenido = await archivo.read()
+    if not contenido:
+        raise HTTPException(400, "El archivo está vacío.")
+    if len(contenido) > MAX_MAPA_BYTES:
+        raise HTTPException(413, "El mapa supera los 15 MB.")
+
+    nombre = f"escena-{escena.id}-{uuid.uuid4().hex[:10]}{sufijo}"
+    destino = ESCENARIOS_DIR / nombre
+    destino.write_bytes(contenido)
+
+    actual = _presentacion_actual(escena)
+    _borrar_archivo_mapa(actual.get("mapa", ""))
+    actual["mapa"] = nombre
+    escena.presentacion_json = dumps(normalizar_presentacion(actual))
+    session.add(escena)
+    session.commit()
+    emit(session, "escenario", "mapa", {"scene_id": escena.id, "archivo": nombre})
+    return _estado(session)
+
+
+@router.delete("/api/escenarios/{scene_id}/mapa")
+def quitar_mapa(scene_id: int, session: Session = Depends(get_session)):
+    """Quita el mapa de la escena y elimina el archivo subido."""
+    escena = _escena(session, scene_id)
+    actual = _presentacion_actual(escena)
+    _borrar_archivo_mapa(actual.get("mapa", ""))
+    actual["mapa"] = ""
+    escena.presentacion_json = dumps(normalizar_presentacion(actual))
+    session.add(escena)
+    session.commit()
+    emit(session, "escenario", "mapa_quitado", {"scene_id": escena.id})
+    return _estado(session)

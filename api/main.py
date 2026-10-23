@@ -9,7 +9,7 @@ from fastapi.staticfiles import StaticFiles
 from sqlmodel import Session
 
 from ai import config as ai_config
-from db import DATA_DIR, SOUNDS_DIR, TOKENS_DIR, engine, init_db
+from db import DATA_DIR, ESCENARIOS_DIR, SOUNDS_DIR, TOKENS_DIR, engine, init_db
 from library import BIBLIOTECA_DIR
 from modules import (
     assistant, biblioteca, characters, core, dice, inventory, minibase, npcs, rules,
@@ -81,6 +81,11 @@ app.include_router(biblioteca.router)
 
 app.mount("/sounds", StaticFiles(directory=str(SOUNDS_DIR)), name="sounds")
 app.mount("/tokens", StaticFiles(directory=str(TOKENS_DIR)), name="tokens")
+app.mount(
+    "/escenas-assets",
+    StaticFiles(directory=str(ESCENARIOS_DIR)),
+    name="escenas-assets",
+)
 app.mount(
     "/biblioteca-clasica",
     StaticFiles(directory=str(BIBLIOTECA_DIR), html=True),

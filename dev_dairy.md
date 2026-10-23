@@ -1,7 +1,7 @@
 # Diario de desarrollo — TTRPG-Assistant
 
 Bitácora de construcción y memoria operativa. Se actualiza al cerrar cada fase.
-Sesión 1 (MVP M0–M9): **2026-10-22**. Sesión 2 (Biblioteca M10): **2026-10-23**.
+Sesión 1 (MVP M0–M9): **2026-10-22**. Sesión 2 (Biblioteca M10): **2026-10-23**. Sesión 3 (Proyector M11): **2026-10-23**.
 
 ---
 
@@ -156,6 +156,48 @@ Sesión 1 (MVP M0–M9): **2026-10-22**. Sesión 2 (Biblioteca M10): **2026-10-2
 - Revisar una a una las campañas y recursos enlazados (la biblioteca original no verificó todos).
 - Añadir logos con licencia clara; hoy todas las fichas usan emoji.
 - Medir el contexto con un modelo real y, si hace falta, resumir fichas largas o buscar por secciones.
+
+---
+
+## Sesión 3 — Proyector de mapas (M11)
+
+**Fecha:** 2026-10-23. **Objetivo:** llevar la funcionalidad de grid/proyección de MiniBase-Web al sistema de escenas existente, sin crear una pantalla aislada ni tocar MiniBase.
+
+### Qué se hizo
+
+- `Scene` gana `presentacion_json` (columna de texto) y `db.init_db` migra bases antiguas con `ALTER TABLE ... ADD COLUMN` idempotente; no se borra ni se recrea nada.
+- `serializers.py` centraliza `PRESENTACION_BASE`, `normalizar_presentacion()` y `presentacion_dict()`. La API normaliza zoom, rotación, paneo, rejilla, color, opacidad y el nombre del mapa, y devuelve solo la URL pública.
+- `modules/scenes.py` añade la acción `set_presentacion` y los endpoints `POST/DELETE /api/escenarios/{id}/mapa`. Los archivos van a `api/data/escenarios/` y se sirven por el nuevo mount `/escenas-assets/`.
+- `main.py` monta los estáticos y `context.py` publica `grid_visible`, `grid_cm` y `mapa_url` en `table_state`.
+- Nuevo `web/src/components/ProjectorStage.tsx`: capa de mapa transformable (zoom, rotación, paneo), luz ambiental, tokens que acompañan al mapa pero se mantienen derechos y rejilla física fija por encima.
+- Nuevo `web/src/lib/proyector.ts`: bus de sincronización con `BroadcastChannel` + `localStorage` y lectura de la calibración física.
+- `ProyectorModule.tsx` se convierte en la sala de control: selector de escena en directo, subida/borrado de mapa (botón o drag & drop), rotación con sliders y giros de 90°, zoom, paneo arrastrando, toggle/color/opacidad de rejilla, dial de tamaño de celda en centímetros, calibración del ancho físico, `Proyectar` y `Pantalla 2`.
+- `web/src/app/proyector/page.tsx` pasa a ser el popup limpio: solo tablero, controles flotantes que se ocultan, botón de pantalla completa, cierre, indicador de reconexión y sincronización en vivo.
+- `EscenariosModule` muestra la miniatura del mapa, botón **Proyectar** y enlace a la sala; `EscenarioModule` enlaza a la sala de proyección.
+- Tests: nuevo `test_escena_presentacion_y_mapa` que cubre normalización, subida, servido estático, borrado y restauración; `test_borrar_escena_limpia_mapa` comprueba que borrar una escena también elimina su archivo.
+
+### Decisiones y detalles
+
+- La rejilla no se hornea: se dibuja encima y queda fija a la pantalla. La imagen se mueve debajo hasta que sus cuadros coincidan.
+- La celda se calcula en centímetros físicos: `cm × (ancho_px_pantalla / ancho_cm_pantalla)`. Sin calibrar se usan 96 dpi; el popup recalcula con el ancho de su propia pantalla, como MiniBase-Web.
+- El paneo se guarda como porcentaje del lienzo, para que la vista previa y el popup mantengan el encuadre aunque cambien de tamaño.
+- La ventana principal controla; el popup solo muestra. `Proyectar` abre el popup sincrónicamente para que el navegador no lo bloquee y `Pantalla 2` intenta colocarlo con la API Multi-Screen.
+- La configuración es por escena (no global) y persiste en `presentacion_json`; la calibración física vive en `localStorage` porque depende de la pantalla del usuario.
+- Los mapas subidos van a `api/data/escenarios/` y están fuera de Git; al borrar escena o mapa se elimina el archivo.
+
+### Verificación
+
+- `pytest -q`: **19 passed**.
+- `npm run build`: Next.js 14.2.35 compila sin errores de tipos.
+- Prueba CDP real con Chrome headless: mapa de prueba servido desde `/escenas-assets/`, transformación `matrix(1.35, ...)` con zoom/paneo, rejilla con 8–15 líneas según el tamaño de celda, popup abierto desde la sala, rejilla apagada/encendida en vivo, rotación 90° y zoom 1.75 sincronizados en el popup y persistidos en la API. Sin errores de consola.
+- Prueba específica con mapa 4:3 sobre lienzo 16:9: la caja del contenido y los tokens mantienen la proporción y las posiciones esperadas (`token_rel` 0.958/0.944 frente a 11.5/12 y 8.5/9); los campos de calibración y celda aceptan `121` y `0.5` sin saltos ni recortes.
+- La DB de demo se restaura sin mapa, sin tokens de prueba y con la presentación por defecto al terminar.
+
+### Pendientes conscientes
+
+- Guardar la calibración física por pantalla en el backend en vez de `localStorage`.
+- Gestos táctiles de zoom/rotación y offsets finos de rejilla para mapas que no empiezan en la esquina.
+- Valorar drag & drop de tokens directamente sobre la rejilla del mapa en una fase futura.
 
 ---
 

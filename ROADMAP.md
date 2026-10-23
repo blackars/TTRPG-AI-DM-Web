@@ -4,7 +4,7 @@ Memoria del proyecto entre sesiones. Cada fase se cierra con tests, `npm run bui
 
 ## Estado general
 
-**MVP completo:** fases M0–M10 implementadas. Backend con **17 tests en verde**, frontend compilando y demo funcional en `http://127.0.0.1:3010/pantalla/mesa`.
+**MVP completo:** fases M0–M11 implementadas. Backend con **19 tests en verde**, frontend compilando y demo funcional en `http://127.0.0.1:3010/pantalla/mesa`.
 
 - API: `http://127.0.0.1:8100`
 - Web: `http://127.0.0.1:3010`
@@ -26,6 +26,7 @@ Memoria del proyecto entre sesiones. Cada fase se cierra con tests, `npm run bui
 | **M8** | Sonidos por escena, WebAudio sintético, archivos locales, crossfade | ✅ | `sounds.py`, `lib/audio.ts`, `SonidoModule` |
 | **M9** | Adaptador MiniBase read-only (catálogo, vínculos, table_state) sin bloquear la app | ✅ (degradado) | `minibase.py`, `MiniBaseModule`, `mini_links`; falta probar contra una instancia real con token |
 | **M10** | Biblioteca TTRPG integrada: fichas, taxonomía, documentos propios, sistema activo y generadores Mythic | ✅ | `biblioteca/`, `library.py`, `modules/biblioteca.py`, `BibliotecaModule`, `taxonomia.json`, `documentos/`, tests |
+| **M11** | Proyector de mapas: subida de imágenes, rotación, zoom, paneo, rejilla con tamaño de celda y calibración física, popup sincronizado | ✅ | `scenes.py` (`presentacion_json`, endpoints de mapa), `ProjectorStage`, `ProyectorModule`, `/proyector`, `lib/proyector.ts`, tests |
 
 ## Decisiones de arquitectura
 
@@ -41,6 +42,10 @@ Memoria del proyecto entre sesiones. Cada fase se cierra con tests, `npm run bui
 - La biblioteca es un módulo más: la fuente editable vive en `biblioteca/`, la API la lee en caliente y el sistema activo + documentos vinculados entran en el contexto del asistente.
 - La taxonomía editorial no reescribe las fichas originales: se mezcla desde `biblioteca/taxonomia.json` en el índice y en la API.
 - Las subidas de material propio van a `api/data/biblioteca/` y nunca se versionan; los PDF se leen con `pypdf` y se cachean como texto.
+- La presentación del proyector se guarda dentro de `scenes.presentacion_json` (una columna nueva migrada de forma idempotente) para no fragmentar el contrato de escenas.
+- Los mapas subidos van a `api/data/escenarios/` (fuera de Git) y se sirven por `/escenas-assets/`; la rejilla nunca se hornea en la imagen.
+- La rejilla se calcula en centímetros físicos: `cm × (ancho_px_pantalla / ancho_cm_pantalla)`. Si no hay calibración se usan 96 dpi; el popup recalcula con el ancho de su propia pantalla.
+- La ventana principal y el popup se sincronizan con `BroadcastChannel` + `localStorage`, con sondeo de la API como respaldo.
 
 ## Checklist final de demo (sección 10 del prompt)
 
@@ -56,6 +61,7 @@ Memoria del proyecto entre sesiones. Cada fase se cierra con tests, `npm run bui
 - [x] Export/import JSON de partida.
 - [x] (M9) Buscar mini real y usarla como token/item **cuando hay MiniBase configurada**; sin conexión el módulo degrada sin romper nada.
 - [x] (M10) Abrir Biblioteca, filtrar fichas, activar un sistema, leer el PDF de familias, tirar Mythic y ver el contexto del asistente actualizado.
+- [x] (M11) Subir un mapa, rotarlo, hacer zoom, ajustar la rejilla en centímetros y proyectarlo en un popup a pantalla completa sin perder la ventana de control.
 - [x] Todo el estado en `GET /api/assistant/context`, coherente y listo para la IA.
 
 ## Pendientes / ideas futuras (no bloquean el MVP)
@@ -68,6 +74,7 @@ Memoria del proyecto entre sesiones. Cada fase se cierra con tests, `npm run bui
 6. **WebSocket/SSE** en lugar de polling para el bus de eventos.
 7. **Tests E2E** automatizados en CI (hoy hay CDP manual + pytest + build).
 8. **Biblioteca:** revisar una a una las campañas/enlaces heredados, añadir logos con licencia y medir el contexto con un modelo real (hoy se recorta a ~14k caracteres).
+9. **Proyector:** guardar la calibración física por pantalla en el backend, gestos táctiles de zoom/rotación en la vista previa y offsets finos de rejilla para mapas que no empiezan en la esquina.
 
 ## Cómo retomar
 

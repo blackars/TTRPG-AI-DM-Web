@@ -88,6 +88,7 @@ class Scene(SQLModel, table=True):
     light_json: str = Field(default='{"color":"#f5b544","opacity":0.18}', sa_column=Column(Text))
     tokens_json: str = Field(default="[]", sa_column=Column(Text))
     playlist_json: str = Field(default="[]", sa_column=Column(Text))
+    presentacion_json: str = Field(default="{}", sa_column=Column(Text))
     activo: bool = False
     ts: str = Field(default_factory=ahora)
 

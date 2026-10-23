@@ -1,10 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
-import { SceneBoard, fondo } from "@/components/SceneBoard";
+import { SceneBoard, fondo, PRESENTACION_VACIA } from "@/components/SceneBoard";
 import { Badge, Button, Empty, ErrorBox, Field, Input, Modal, Select, Textarea } from "@/components/ui";
-import { api, errorTexto } from "@/lib/api";
+import { api, API_URL, errorTexto } from "@/lib/api";
 import { cn } from "@/lib/format";
+import { leerPantallaCm, leerProyectorLocal, publicarProyector } from "@/lib/proyector";
 import { useAppStore } from "@/lib/store";
 import { useApi } from "@/lib/useApi";
 import type { EscenariosData } from "./EscenarioModule";
@@ -77,6 +79,33 @@ export function EscenariosModule(_props: ModuleProps) {
     if (ok) setForm(null);
   }
 
+  function proyectar(escena: EscenariosData["escenas"][number]) {
+    if (!data) return;
+    const local = leerProyectorLocal();
+    // Si la sala de control ya publicó esta misma escena, no pisamos su
+    // presentación más reciente con la copia de la API.
+    if (!local || local.escena?.id !== escena.id) {
+      publicarProyector({
+        escena,
+        grid: data.grid,
+        presentacion: escena.presentacion ?? PRESENTACION_VACIA,
+        pantalla_cm: leerPantallaCm(),
+      });
+    }
+    const ventana = window.open(
+      "/proyector",
+      "ttrpg-proyector",
+      "popup=yes,width=1280,height=800,left=80,top=80",
+    );
+    if (!ventana) {
+      notify("El navegador bloqueó la ventana del proyector", "error");
+      return;
+    }
+    if (!escena.activo) {
+      void ejecutar("activar", { id: escena.id }, `Escena activa: ${escena.nombre}`);
+    }
+  }
+
   if (error) return <ErrorBox>{error}</ErrorBox>;
   if (!data) return <div className="h-48 animate-pulse rounded-xl bg-white/5" />;
 
@@ -89,9 +118,14 @@ export function EscenariosModule(_props: ModuleProps) {
           <p className="text-[9px] uppercase tracking-[0.25em] text-slate-500">Catálogo de escenas</p>
           <p className="text-xs text-slate-400">{data.escenas.length} escenas · {data.activa?.nombre ?? "ninguna activa"}</p>
         </div>
-        <Button size="sm" variant="primary" onClick={() => setForm({ ...NUEVA, playlist: [] })}>
-          + Nueva escena
-        </Button>
+        <div className="flex flex-wrap items-center gap-1.5">
+          <Link href="/pantalla/proyector">
+            <Button size="sm" variant="secondary">📺 Sala de proyección</Button>
+          </Link>
+          <Button size="sm" variant="primary" onClick={() => setForm({ ...NUEVA, playlist: [] })}>
+            + Nueva escena
+          </Button>
+        </div>
       </div>
 
       <div className="grid gap-2.5 md:grid-cols-2">
@@ -104,6 +138,15 @@ export function EscenariosModule(_props: ModuleProps) {
             )}
           >
             <div className="relative h-24" style={fondo(escena.bg)}>
+              {escena.presentacion?.mapa_url ? (
+                <img
+                  src={`${API_URL}${escena.presentacion.mapa_url}`}
+                  alt=""
+                  className="absolute inset-0 h-full w-full object-cover opacity-80"
+                  draggable={false}
+                />
+              ) : null}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
               <div
                 className="absolute inset-0"
                 style={{
@@ -123,6 +166,7 @@ export function EscenariosModule(_props: ModuleProps) {
                 ))}
               </div>
               <div className="absolute right-1.5 top-1.5 flex gap-1">
+                {escena.presentacion?.mapa_url ? <Badge color="green">mapa</Badge> : null}
                 {escena.activo ? <Badge color="gold">activa</Badge> : null}
                 <Badge color="slate">{escena.tokens.length} tokens</Badge>
               </div>
@@ -138,6 +182,9 @@ export function EscenariosModule(_props: ModuleProps) {
                 {!escena.playlist.length ? <span className="text-[9px] italic text-slate-600">sin playlist</span> : null}
               </div>
               <div className="flex flex-wrap gap-1 pt-1">
+                <Button size="xs" variant="secondary" onClick={() => proyectar(escena)}>
+                  📺 Proyectar
+                </Button>
                 {!escena.activo ? (
                   <Button
                     size="xs"
@@ -198,6 +245,12 @@ export function EscenariosModule(_props: ModuleProps) {
                 </button>
               ))}
             </div>
+            <p className="text-[10px] leading-relaxed text-slate-500">
+              El fondo es para el tablero táctico. Para subir y proyectar una imagen de mapa usa la{" "}
+              <Link href="/pantalla/proyector" className="text-gold/80 underline hover:text-gold">
+                sala de proyección
+              </Link>.
+            </p>
             <Field label="Descripción">
               <Textarea value={form.descripcion} onChange={(e) => setForm({ ...form, descripcion: e.target.value })} />
             </Field>

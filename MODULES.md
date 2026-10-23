@@ -25,8 +25,8 @@ POST /api/modules/<id>/action
 | Inventario | `inventario` | principal | `modules/inventory.py` | secciones e items CRUD + mover |
 | Núcleos de reglas | `reglas` | principal | `modules/rules.py` | `toggle`, `set_opcion`, `guardar_ruleset`, checks |
 | Escenario activo | `escenario` | principal | `modules/scenes.py` (alias) | tokens y luz sobre la escena activa |
-| Escenarios | `escenarios` | lateral | `modules/scenes.py` | CRUD, activar, tokens, luz |
-| Proyector | `proyector` | principal | `modules/core.py` | `publicar`, `refrescar` |
+| Escenarios | `escenarios` | lateral | `modules/scenes.py` | CRUD, activar, tokens, luz, presentación |
+| Proyector | `proyector` | principal | `modules/core.py` + `scenes.py` | sala de control, mapas, rejilla, popup |
 | Sonido ambiente | `sonido` | overlay | `modules/sounds.py` | crear/editar/borrar/asignar |
 | Personajes y criaturas | `personajes` | lateral | `modules/characters.py` | crear/editar/borrar/enviar al tablero |
 | NPCs | `npcs` | lateral | `modules/npcs.py` | crear/editar/borrar + texto IA |
@@ -107,17 +107,20 @@ POST /api/modules/<id>/action
 ## Escenarios (`escenarios`)
 
 - **Frontend:** `web/src/modules/EscenariosModule.tsx`
-- **Qué hace:** catálogo de escenas, creación/edición/borrado, activación, playlist por escena, presets de fondo.
-- **API:** `GET .../escenarios/state`; `POST .../action`: `crear`, `editar`, `borrar`, `activar`, `agregar_token`, `mover_token`, `borrar_token`, `set_light`.
-- **Persistencia:** `scenes` (`bg`, `light_json`, `tokens_json`, `playlist_json`, `activo`). Solo una escena activa.
+- **Qué hace:** catálogo de escenas, creación/edición/borrado, activación, playlist por escena, presets de fondo, miniatura del mapa y botón **Proyectar**.
+- **API:** `GET .../escenarios/state`; `POST .../action`: `crear`, `editar`, `borrar`, `activar`, `set_presentacion`, `agregar_token`, `mover_token`, `borrar_token`, `set_light`. Mapas: `POST /api/escenarios/{id}/mapa` y `DELETE /api/escenarios/{id}/mapa`.
+- **Persistencia:** `scenes` (`bg`, `light_json`, `tokens_json`, `playlist_json`, `presentacion_json`, `activo`). Solo una escena activa. Los archivos de mapa viven en `api/data/escenarios/` y se sirven en `/escenas-assets/`.
+- **Presentación:** `presentacion_json` guarda `zoom`, `rotacion`, `pan_x`, `pan_y`, `grid_visible`, `grid_cm`, `grid_color`, `grid_opacity` y el nombre del archivo de mapa. La API normaliza y limita los valores.
 - **Contexto:** `escena_activa`, listado `escenas`, badge `escenarios`.
 
 ## Proyector (`proyector`)
 
-- **Frontend:** `web/src/modules/ProyectorModule.tsx` y ruta limpia `web/src/app/proyector/page.tsx`.
-- **Qué hace:** vista de segunda pantalla con fondo, tokens, luz, personajes y última tirada. Se refresca por polling y responde a eventos.
-- **API:** `GET /api/modules/proyector/state`, `POST .../proyector/action` (`publicar` / `refrescar`).
-- **Contexto:** `table_state` (`phase`, `grid_visible`, `tokens`).
+- **Frontend:** `web/src/modules/ProyectorModule.tsx` (sala de control) y ruta limpia `web/src/app/proyector/page.tsx` (popup del segundo monitor).
+- **Qué hace:** controla la escena activa en directo: subir/quitar mapa, rotar, hacer zoom, paneo, activar/ocultar rejilla, color, opacidad, dial de tamaño de celda y calibración del ancho físico de la pantalla. Abre el popup con **Proyectar** o intenta la segunda pantalla con **Pantalla 2**.
+- **Sincronización:** `BroadcastChannel` + `localStorage` publican cada cambio al popup; la API persiste en `scenes.presentacion_json` y el popup sondea como respaldo. La rejilla se recalcula con `cm × (px_pantalla / cm_pantalla)`.
+- **API:** `GET /api/modules/proyector/state`, `POST .../proyector/action` (`publicar` / `refrescar`). La presentación se guarda vía `POST /api/modules/escenarios/action` (`set_presentacion`).
+- **Contexto:** `table_state` (`phase`, `grid_visible`, `grid_cm`, `mapa_url`, `tokens`).
+- **Assets:** `/escenas-assets/` sirve los mapas subidos; `ProjectorStage` dibuja mapa, luz, tokens y rejilla.
 
 ## Sonido ambiente (`sonido`)
 

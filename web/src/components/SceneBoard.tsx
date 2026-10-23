@@ -22,9 +22,34 @@ export interface Escena {
   light: { color: string; opacity: number };
   tokens: TokenEscena[];
   playlist: number[];
+  presentacion?: PresentacionEscena;
   activo: boolean;
   ts: string;
 }
+
+export interface PresentacionEscena {
+  mapa_url: string;
+  zoom: number;
+  rotacion: number;
+  pan_x: number;
+  pan_y: number;
+  grid_visible: boolean;
+  grid_cm: number;
+  grid_color: string;
+  grid_opacity: number;
+}
+
+export const PRESENTACION_VACIA: PresentacionEscena = {
+  mapa_url: "",
+  zoom: 1,
+  rotacion: 0,
+  pan_x: 0,
+  pan_y: 0,
+  grid_visible: true,
+  grid_cm: 2.5,
+  grid_color: "#22ff88",
+  grid_opacity: 0.6,
+};
 
 export function fondo(valor: string): CSSProperties {
   if (!valor) return { background: "#101522" };

@@ -1,6 +1,7 @@
 """Pruebas de humo y contrato de la API (sin red, proveedor mock)."""
 from __future__ import annotations
 
+import base64
 import os
 import tempfile
 from pathlib import Path
@@ -34,6 +35,8 @@ def test_health_y_contexto(client):
     assert len(ctx["npcs"]) == 3
     assert ctx["escena_activa"]["nombre"] == "Claro de los Susurros"
     assert ctx["mix_reglas"]["activos"] == ["d20", "ventaja", "mythic", "spawn"]
+    assert "presentacion" in ctx["escena_activa"]
+    assert "grid_cm" in ctx["table_state"] and "mapa_url" in ctx["table_state"]
 
 
 def test_contrato_modulos_completo(client):
@@ -41,7 +44,7 @@ def test_contrato_modulos_completo(client):
     ids = [
         "reloj", "notas", "estado", "dado", "inventario", "reglas", "escenario",
         "escenarios", "proyector", "sonido", "personajes", "npcs", "partidas",
-        "asistente", "minibase", "editor",
+        "asistente", "minibase", "biblioteca", "editor",
     ]
     for modulo in ids:
         r = client.get(f"/api/modules/{modulo}/state")
@@ -209,6 +212,84 @@ def test_escenas_tokens_y_activacion(client):
     # devolver el escenario inicial para el resto de pruebas
     claro = next(e for e in estado["escenas"] if e["nombre"] == "Claro de los Susurros")
     client.post("/api/modules/escenarios/action", json={"action": "activar", "id": claro["id"]})
+
+
+def test_escena_presentacion_y_mapa(client):
+    estado = client.get("/api/modules/escenarios/state").json()
+    activa = estado["activa"]
+    assert activa and activa["presentacion"]["grid_cm"] == 2.5
+
+    r = client.post("/api/modules/escenarios/action", json={
+        "action": "set_presentacion",
+        "scene_id": activa["id"],
+        "presentacion": {
+            "zoom": 1.75, "rotacion": 90, "pan_x": 12.5, "pan_y": -4,
+            "grid_visible": False, "grid_cm": 3.25, "grid_color": "#ff5500",
+            "grid_opacity": 0.42,
+        },
+    })
+    assert r.status_code == 200, r.text
+    p = next(e for e in r.json()["escenas"] if e["id"] == activa["id"])["presentacion"]
+    assert p["zoom"] == 1.75
+    assert p["rotacion"] == 90
+    assert p["pan_x"] == 12.5
+    assert p["grid_visible"] is False
+    assert p["grid_cm"] == 3.25
+    assert p["grid_color"] == "#ff5500"
+
+    png = base64.b64decode(
+        "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk"
+        "+A8AAQUBAScY42YAAAAASUVORK5CYII="
+    )
+    r = client.post(
+        f"/api/escenarios/{activa['id']}/mapa",
+        files={"archivo": ("mapa-prueba.png", png, "image/png")},
+    )
+    assert r.status_code == 200, r.text
+    p = next(e for e in r.json()["escenas"] if e["id"] == activa["id"])["presentacion"]
+    assert p["mapa_url"].startswith("/escenas-assets/")
+    imagen = client.get(p["mapa_url"])
+    assert imagen.status_code == 200 and imagen.content == png
+
+    r = client.delete(f"/api/escenarios/{activa['id']}/mapa")
+    assert r.status_code == 200
+    p = next(e for e in r.json()["escenas"] if e["id"] == activa["id"])["presentacion"]
+    assert p["mapa_url"] == ""
+    assert client.get(p["mapa_url"] or "/escenas-assets/no-existe").status_code == 404
+
+    # Restaurar la presentación por defecto para no contaminar otras pruebas.
+    client.post("/api/modules/escenarios/action", json={
+        "action": "set_presentacion",
+        "scene_id": activa["id"],
+        "presentacion": {
+            "zoom": 1, "rotacion": 0, "pan_x": 0, "pan_y": 0,
+            "grid_visible": True, "grid_cm": 2.5,
+            "grid_color": "#22ff88", "grid_opacity": 0.6,
+        },
+    })
+
+
+def test_borrar_escena_limpia_mapa(client):
+    creada = client.post("/api/modules/escenarios/action", json={
+        "action": "crear", "nombre": "Escena temporal M11"})
+    assert creada.status_code == 200
+    escena = next(e for e in creada.json()["escenas"] if e["nombre"] == "Escena temporal M11")
+    png = base64.b64decode(
+        "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk"
+        "+A8AAQUBAScY42YAAAAASUVORK5CYII="
+    )
+    subida = client.post(
+        f"/api/escenarios/{escena['id']}/mapa",
+        files={"archivo": ("mapa-temporal.png", png, "image/png")},
+    )
+    url = next(e for e in subida.json()["escenas"] if e["id"] == escena["id"])["presentacion"]["mapa_url"]
+    assert client.get(url).status_code == 200
+
+    borrada = client.post("/api/modules/escenarios/action", json={
+        "action": "borrar", "id": escena["id"]})
+    assert borrada.status_code == 200
+    assert all(e["id"] != escena["id"] for e in borrada.json()["escenas"])
+    assert client.get(url).status_code == 404
 
 
 def test_personajes_y_envio_al_tablero(client):

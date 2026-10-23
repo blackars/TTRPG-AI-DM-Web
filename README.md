@@ -49,9 +49,10 @@ Abre **`http://127.0.0.1:3010/pantalla/mesa`**. La base de datos y los seeds se 
 | `http://127.0.0.1:3010/pantalla/inventario` | Inventarios por personaje/criatura |
 | `http://127.0.0.1:3010/pantalla/cronicas` | Partidas guardadas y NPCs |
 | `http://127.0.0.1:3010/pantalla/escenas` | Catálogo de escenas |
+| `http://127.0.0.1:3010/pantalla/proyector` | Sala de proyección: mapa, rejilla, zoom y rotación |
 | `http://127.0.0.1:3010/pantalla/biblioteca` | Biblioteca TTRPG, sistema activo y generadores |
 | `http://127.0.0.1:8100/biblioteca-clasica/index.html` | Interfaz clásica de la biblioteca (sin build) |
-| `http://127.0.0.1:3010/proyector` | Vista limpia para el segundo monitor |
+| `http://127.0.0.1:3010/proyector` | Popup limpio para el segundo monitor (se abre desde la sala) |
 | `http://127.0.0.1:8100/docs` | OpenAPI interactivo |
 | `http://127.0.0.1:8100/api/assistant/context` | Contexto completo que consume la IA |
 | `http://127.0.0.1:8100/health` | Salud de la API y ruta de la SQLite |
@@ -125,6 +126,20 @@ Para regenerar los índices y la interfaz clásica después de editar fichas:
 python biblioteca\tools\build_index.py
 ```
 
+## Proyector de mapas (M11)
+
+La sala de proyección vive en `http://127.0.0.1:3010/pantalla/proyector` y extiende el sistema de escenas sin crear una pantalla aislada.
+
+- **Mapa subido al servidor:** JPG, PNG, WEBP, GIF o AVIF hasta 15 MB. Se guarda en `api/data/escenarios/` (fuera de Git) y se sirve en `/escenas-assets/`.
+- **Imagen transformable:** rotación de -180° a 180° (con giros rápidos de 90°), zoom de 0.25× a 4× y paneo arrastrando la vista previa.
+- **Rejilla independiente:** se dibuja sobre el mapa, no se hornea. Toggle de visibilidad, color, opacidad y un dial de tamaño de celda en centímetros.
+- **Calibración física:** ancho real de la pantalla en centímetros. La celda se calcula en `cm × (ancho_px_pantalla / ancho_cm)`; sin calibrar se asumen 96 dpi. El popup recalcula la rejilla con el ancho de su propia pantalla.
+- **Ventana emergente:** `Proyectar` abre `/proyector` en un popup que se arrastra al segundo monitor; `Pantalla 2` intenta colocarlo automáticamente con la API Multi-Screen. La ventana principal sigue siendo el control.
+- **Sincronización en vivo:** cada cambio se publica por `BroadcastChannel` + `localStorage` y se persiste en `scenes.presentacion_json`; el popup también sondea la API como respaldo.
+- **Tokens incluidos:** la capa de tokens se mueve, gira y escala con el mapa, pero los emojis se mantienen derechos y legibles.
+
+La configuración queda en `scenes.presentacion_json` (`zoom`, `rotacion`, `pan_x`, `pan_y`, `grid_visible`, `grid_cm`, `grid_color`, `grid_opacity` y el archivo de mapa). La migración de SQLite añade la columna de forma idempotente sin borrar datos.
+
 ## Pruebas
 
 ```powershell
@@ -137,7 +152,7 @@ cd web
 npm run build
 ```
 
-Resultado actual: **17 tests backend en verde** y build de Next.js sin errores.
+Resultado actual: **19 tests backend en verde** y build de Next.js sin errores.
 
 ## Estructura
 
@@ -164,6 +179,8 @@ TTRPG-Assistant/
 └─ dev_dairy.md
 ```
 
+`api/data/` (SQLite, sonidos, tokens, biblioteca y mapas de escenario) está fuera de Git.
+
 ## Estado del MVP
 
-Las fases **M0–M10** están implementadas. El checklist completo de demo está marcado en `ROADMAP.md`. Quedan como mejoras posteriores (no bloqueantes): drag & drop real de tokens, subida de archivos de audio desde la UI, módulo de visión futura y publicación opcional del `table_state` en el proyector de MiniBase.
+Las fases **M0–M11** están implementadas. El checklist completo de demo está marcado en `ROADMAP.md`. Quedan como mejoras posteriores (no bloqueantes): drag & drop real de tokens, subida de archivos de audio desde la UI, módulo de visión futura y calibración física persistente por pantalla en el backend.

@@ -109,7 +109,9 @@ def build_context(session: Session) -> dict:
         "biblioteca": biblioteca_ctx,
         "table_state": {
             "phase": "narrativa",
-            "grid_visible": True,
+            "grid_visible": bool((escena_dict or {}).get("presentacion", {}).get("grid_visible", True)),
+            "grid_cm": (escena_dict or {}).get("presentacion", {}).get("grid_cm", 2.5),
+            "mapa_url": (escena_dict or {}).get("presentacion", {}).get("mapa_url", ""),
             "tokens": escena_dict["tokens"] if escena_dict else [],
         },
     }

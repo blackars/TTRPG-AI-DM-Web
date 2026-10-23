@@ -67,12 +67,12 @@ const DEFINICIONES: Array<ModuleDef> = [
   },
   {
     id: "escenarios", nombre: "Escenarios", icono: "🎭",
-    descripcion: "Catálogo de escenas, edición, activación y playlist.",
+    descripcion: "Catálogo de escenas, edición, activación, mapas y playlist.",
     slot: "lateral", overlay: false, singleton: true, Component: EscenariosModule,
   },
   {
     id: "proyector", nombre: "Proyector", icono: "📺",
-    descripcion: "Vista a pantalla completa de la escena activa para el segundo monitor.",
+    descripcion: "Sala de proyección: mapa, zoom, rotación, rejilla y popup para la segunda pantalla.",
     slot: "principal", overlay: false, singleton: true, Component: ProyectorModule,
   },
   {

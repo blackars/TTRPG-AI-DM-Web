@@ -106,6 +106,9 @@ export function EscenarioModule(_props: ModuleProps) {
         </div>
         <div className="flex shrink-0 flex-wrap gap-1.5">
           <Button size="sm" variant="secondary" onClick={() => setModal(true)}>+ Token</Button>
+          <Link href="/pantalla/proyector">
+            <Button size="sm" variant="primary">📺 Proyectar</Button>
+          </Link>
           <Link href="/pantalla/escenas">
             <Button size="sm" variant="ghost">Gestionar escenas</Button>
           </Link>
